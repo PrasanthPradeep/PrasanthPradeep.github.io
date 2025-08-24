@@ -483,6 +483,22 @@
             });
             document.querySelectorAll('.desktop-icon[data-command]').forEach(icon => { icon.addEventListener('click', (e) => { e.preventDefault(); processCommand(icon.getAttribute('data-command')); }); });
 
+            const apiUrl = "/api/gemini";
+
+async function callGemini(prompt) {
+  const response = await fetch(apiUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }]
+    }),
+  });
+
+  const data = await response.json();
+  console.log(data);
+}
+
+
             // --- Draggable Terminal Window Logic ---
             const terminalContainer = document.getElementById('terminal-container');
             const terminalHeader = document.getElementById('terminal-header');
