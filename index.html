@@ -483,20 +483,42 @@
             });
             document.querySelectorAll('.desktop-icon[data-command]').forEach(icon => { icon.addEventListener('click', (e) => { e.preventDefault(); processCommand(icon.getAttribute('data-command')); }); });
 
-            const apiUrl = "/api/gemini";
+              const API_URL = "/api/gemini";
 
-async function callGemini(prompt) {
-  const response = await fetch(apiUrl, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }]
-    }),
-  });
+  // Single source of truth for AI calls used by ai chat + interview flows
+  async function callGemini(prompt, chatHistory = [], speaker = 'AI') {
+    // Optional: if you use the spinner UI, you can add it here if needed
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        // We send prompt + history to our API, which formats for Gemini
+        body: JSON.stringify({ prompt, history: chatHistory })
+      });
 
-  const data = await response.json();
-  console.log(data);
-}
+      if (!response.ok) {
+        // This prevents "Unexpected end of JSON input"
+        const text = await response.text().catch(() => "");
+        throw new Error(`HTTP ${response.status}: ${text || "No body"}`);
+      }
+
+      const data = await response.json(); // safe to parse now
+
+      // Extract text robustly
+      const parts = data?.candidates?.[0]?.content?.parts;
+      if (!parts || !Array.isArray(parts)) return null;
+
+      const text = parts
+        .map(p => (typeof p.text === "string" ? p.text : ""))
+        .join("\n")
+        .trim();
+
+      return text || null;
+    } catch (err) {
+      console.error("callGemini error:", err);
+      return null;
+    }
+  }
 
 
             // --- Draggable Terminal Window Logic ---
