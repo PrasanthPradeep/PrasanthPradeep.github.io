@@ -7,36 +7,42 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
+        /* Base styles for the body and overall theme */
         body {
             font-family: 'Fira Code', monospace;
-            background-color: #1a1b26; /* Set a solid background color */
+            background-color: #1a1b26; /* A solid, dark background color */
         }
+        /* The canvas for the animated background */
         #background-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 0; /* Behind terminal, but above solid background */
+            z-index: 0; /* Positioned behind all other content */
         }
+        /* Container for the main terminal window, centered on the page */
         #terminal-container {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            z-index: 2; /* Ensure terminal is on top of the canvas and icons */
+            z-index: 2; /* Ensures terminal is on top of the background */
         }
+        /* The header of the terminal window, which acts as the drag handle */
         #terminal-header {
             cursor: move;
         }
+        /* Container for the clickable desktop icons */
         #desktop-icons {
             position: absolute;
             top: 0;
             left: 50%;
             transform: translateX(-50%);
             padding: 1rem;
-            z-index: 1;
+            z-index: 1; /* Above the canvas, below the terminal */
         }
+        /* Styling for individual desktop icons */
         .desktop-icon {
             color: #c0caf5;
             text-decoration: none;
@@ -59,6 +65,7 @@
             font-size: 12px;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
+        /* Custom scrollbar for the terminal output area */
         .terminal-output::-webkit-scrollbar {
             width: 8px;
         }
@@ -69,9 +76,11 @@
             background-color: rgba(74, 79, 105, 0.5);
             border-radius: 4px;
         }
+        /* Hides the native text input cursor */
         #terminal-input {
-            caret-color: transparent; /* Hides the native cursor */
+            caret-color: transparent;
         }
+        /* Shared styles for the input and its mirror element for cursor positioning */
         .terminal-input-style {
             font-size: 1em;
             padding: 0;
@@ -79,6 +88,7 @@
             border: 0;
             line-height: 1.2em;
         }
+        /* The fake, blinking cursor */
         .cursor {
             display: inline-block;
             width: 10px;
@@ -93,9 +103,9 @@
             from, to { background-color: transparent }
             50% { background-color: #a9b1d6; }
         }
-        /* Glassmorphism styles */
+        /* Glassmorphism styles for a modern, blurred background effect */
         .glass-effect {
-            background: rgba(36, 40, 59, 0.65); /* Semi-transparent background */
+            background: rgba(36, 40, 59, 0.65);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(74, 79, 105, 0.4);
@@ -107,29 +117,32 @@
 </head>
 <body class="text-[#a9b1d6] min-h-screen p-4 overflow-hidden">
 
+    <!-- Canvas for the interactive particle background -->
     <canvas id="background-canvas"></canvas>
 
+    <!-- Clickable desktop icons for common commands -->
     <div id="desktop-icons" class="flex flex-row space-x-4">
         <!-- About Icon -->
         <a href="#" data-command="about" class="desktop-icon p-2 rounded-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
             <span>About Me</span>
         </a>
         <!-- Projects Icon -->
         <a href="#" data-command="projects" class="desktop-icon p-2 rounded-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9.75h16.5m-16.5 0A2.25 2.25 0 015.25 7.5h13.5a2.25 2.25 0 012.25 2.25m-16.5 0v6.75a2.25 2.25 0 002.25 2.25h13.5a2.25 2.25 0 002.25-2.25V9.75M6 13.5h.008v.008H6v-.008z" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9.75h16.5m-16.5 0A2.25 2.25 0 015.25 7.5h13.5a2.25 2.25 0 012.25 2.25m-16.5 0v6.75a2.25 2.25 0 002.25 2.25h13.5a2.25 2.25 0 002.25-2.25V9.75M6 13.5h.008v.008H6v-.008z" /></svg>
             <span>Projects</span>
         </a>
         <!-- GitHub Icon -->
         <a href="https://github.com/PrasanthPradeep" target="_blank" class="desktop-icon p-2 rounded-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
             <span>GitHub</span>
         </a>
     </div>
 
+    <!-- The main draggable terminal window -->
     <div id="terminal-container" class="w-full max-w-4xl h-[80vh]">
         <div id="terminal" class="w-full h-full rounded-lg shadow-2xl flex flex-col overflow-hidden glass-effect">
-            <!-- Terminal Header -->
+            <!-- Terminal Header with window controls and title -->
             <div id="terminal-header" class="glass-header-footer flex items-center p-2 border-b border-[rgba(74,79,105,0.4)]">
                 <div class="flex space-x-2">
                     <div class="w-3 h-3 rounded-full bg-red-500"></div>
@@ -139,12 +152,12 @@
                 <div class="flex-grow text-center text-sm text-gray-400">prasanth@portfolio: ~</div>
             </div>
 
-            <!-- Terminal Body -->
+            <!-- Terminal Body where output is displayed -->
             <div id="terminal-output" class="terminal-output flex-grow p-4 overflow-y-auto text-sm" onclick="document.getElementById('terminal-input').focus()">
-                <!-- Output will be appended here -->
+                <!-- Command output will be appended here -->
             </div>
 
-            <!-- Terminal Input -->
+            <!-- Terminal Input area -->
             <div class="glass-header-footer p-2 border-t border-[rgba(74,79,105,0.4)]">
                 <div class="flex items-center">
                     <span id="prompt-prefix" class="flex items-center">
@@ -154,8 +167,10 @@
                         <span class="text-gray-400 mr-2">$</span>
                     </span>
                     <div class="relative flex-grow">
+                        <!-- This span is invisible but mirrors the input's text to correctly position the fake cursor -->
                         <span id="input-mirror" class="absolute top-0 left-0 invisible whitespace-pre terminal-input-style"></span>
                         <input type="text" id="terminal-input" class="w-full bg-transparent border-none outline-none text-[#a9b1d6] terminal-input-style" autocomplete="off" autofocus>
+                        <!-- The fake cursor that blinks -->
                         <div id="fake-cursor" class="cursor absolute top-0 left-0"></div>
                     </div>
                 </div>
@@ -169,6 +184,7 @@
         const ctx = canvas.getContext('2d');
         let particlesArray;
         const mouse = { x: null, y: null, radius: (canvas.height / 150) * (canvas.width / 150) };
+        
         window.addEventListener('mousemove', (event) => { mouse.x = event.x; mouse.y = event.y; });
         
         class Particle {
@@ -191,6 +207,7 @@
                 this.draw();
             }
         }
+        
         function init() {
             canvas.width = window.innerWidth; canvas.height = window.innerHeight; mouse.radius = (canvas.height / 150) * (canvas.width / 150); particlesArray = [];
             let numberOfParticles = (canvas.height * canvas.width) / 9000;
@@ -200,7 +217,9 @@
                 particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
             }
         }
+        
         function animate() { requestAnimationFrame(animate); ctx.clearRect(0, 0, innerWidth, innerHeight); for (let i = 0; i < particlesArray.length; i++) { particlesArray[i].update(); } connect(); }
+        
         function connect() {
             let opacityValue = 1;
             for (let a = 0; a < particlesArray.length; a++) {
@@ -213,450 +232,271 @@
                 }
             }
         }
+        
         window.addEventListener('resize', () => { init(); });
         window.addEventListener('mouseout', () => { mouse.x = undefined; mouse.y = undefined; });
+        
         init();
         animate();
 
         // --- Terminal Application Script ---
         document.addEventListener('DOMContentLoaded', () => {
+            // DOM Element references
             const output = document.getElementById('terminal-output');
             const input = document.getElementById('terminal-input');
             const terminal = document.getElementById('terminal');
-            const promptDir = document.getElementById('prompt-dir');
+            let promptDir = document.getElementById('prompt-dir'); // Use let to re-assign
+            const promptPrefix = document.getElementById('prompt-prefix');
             const mirror = document.getElementById('input-mirror');
             const cursor = document.getElementById('fake-cursor');
-            const startTime = new Date();
 
+            // Application State
             let commandHistory = [];
             let historyIndex = -1;
             let interviewMode = false;
             let hireMode = false;
+            let aiChatMode = false;
             let hireData = {};
             let interviewHistory = [];
+            let aiChatHistory = [];
             let currentPath = '/home/prasanth';
 
-            const profileData = {
-                name: "Prasanth Pradeep",
-                role: "CSE Student | Web & AI Enthusiast",
-                email: "prasanthpradeep@email.com",
-                githubUser: "PrasanthPradeep",
-                linkedinUser: "prasanth-pradeep-",
-                about: "I am a passionate and creative CSE student with a knack for building beautiful and functional web applications. I specialize in Web Development and AI, and I'm always eager to learn new things and take on challenging projects.",
-                skills: [
-                    { category: "Languages", items: ["Python", "C++", "JavaScript", "TypeScript"] },
-                    { category: "Web Dev", items: ["React", "Node.js", "HTML/CSS", "Tailwind CSS"] },
-                    { category: "Concepts", items: ["DSA", "AI", "OOP"] }
-                ],
-                projects: [
-                    { name: "PromptPilot", description: "An AI-powered tool to help users craft better prompts.", link: "https://github.com/PrasanthPradeep/PromptPilot" },
-                    { name: "Project Prism", description: "A web-based data visualization tool.", link: "https://github.com/PrasanthPradeep/ProjectPrism" },
-                    { name: "Who’s Prashu?", description: "My personal portfolio website.", link: "https://github.com/PrasanthPradeep/prasanthp" }
-                ],
-                location: "Kollam, Kerala, India",
-                status: "Open to new opportunities",
-            };
-
-            const quotes = [
-                { quote: "Talk is cheap. Show me the code.", author: "Linus Torvalds" },
-                { quote: "The best way to get started is to quit talking and begin doing.", author: "Walt Disney" },
-                { quote: "Code is like humor. When you have to explain it, it's bad.", author: "Cory House" },
-                { quote: "First, solve the problem. Then, write the code.", author: "John Johnson" },
-                { quote: "Experience is the name everyone gives to their mistakes.", author: "Oscar Wilde" },
-                { quote: "In order to be irreplaceable, one must always be different.", author: "Coco Chanel" },
-                { quote: "Java is to JavaScript what car is to Carpet.", author: "Chris Heilmann" },
-                { quote: "Knowledge is power.", author: "Francis Bacon" },
-                { quote: "Sometimes it pays to stay in bed on Monday, rather than spending the rest of the week debugging Monday's code.", author: "Dan Salomon" },
-                { quote: "Perfection is achieved not when there is nothing more to add, but rather when there is nothing more to take away.", author: "Antoine de Saint-Exupery" }
-            ];
-
-            const welcomeMessage = [
-                `<div class="flex items-center space-x-4">
-                    <img src="./prasanthp_profile.jpg" alt="Profile Picture" class="rounded-full border-2 border-[#7aa2f7] w-24 h-24 flex-shrink-0">
-                    <div class="flex flex-col justify-center">
-                        <p>Welcome to my Interactive Portfolio!</p>
-                        <p class="mt-2">Type \`help\` or click an icon to see available commands.</p>
-                    </div>
-                </div>`
-            ];
-
-            const commands = {
-                help: `
-<span class="text-green-400">Available Commands:</span>
-<ul class="list-inside list-disc ml-4">
-    <li><span class="text-blue-400">about</span>      - Displays my professional summary.</li>
-    <li><span class="text-blue-400">skills</span>     - Lists my technical skills.</li>
-    <li><span class="text-blue-400">projects</span>   - Shows my recent projects.</li>
-    <li><span class="text-blue-400">contact</span>    - Provides my contact information.</li>
-    <li><span class="text-blue-400">neofetch</span>   - ✨ Display system information.</li>
-    <li><span class="text-blue-400">ls</span>         - List directory contents.</li>
-    <li><span class="text-blue-400">cd [dir]</span>   - Change directory.</li>
-    <li><span class="text-blue-400">cat [file]</span> - Display file content.</li>
-    <li><span class="text-blue-400">ai [prompt]</span> - ✨ Ask the AI assistant a general question.</li>
-    <li><span class="text-blue-400">ai suggest [section]</span> - ✨ Get AI-powered suggestions to improve a section (e.g., 'about', 'projects').</li>
-    <li><span class="text-blue-400">ai interview</span> - ✨ Start a mock interview session with the AI.</li>
-    <li><span class="text-blue-400">sudo hire</span>    - ✨ Hire me!</li>
-    <li><span class="text-blue-400">clear</span>      - Clears the terminal screen.</li>
-    <li><span class="text-blue-400">history</span>    - Shows command history.</li>
-</ul>
-                `,
-                about: () => `
-<div class="flex items-center space-x-4">
-    <img src="./prasanthp_profile.jpg" alt="Profile Picture" class="rounded-full border-2 border-[#7aa2f7] w-24 h-24 flex-shrink-0">
-    <div class="flex flex-col justify-center">
-        <span class="text-green-400">About Me:</span>
-        <p class="mt-1">${profileData.about}</p>
-    </div>
-</div>
-                `,
-                skills: () => {
-                    let skillsHTML = '<span class="text-green-400">Technical Skills:</span><ul class="list-inside mt-2 grid grid-cols-2 md:grid-cols-3 gap-2">';
-                    profileData.skills.forEach(skillCategory => {
-                        skillsHTML += `<li><span class="text-yellow-400">${skillCategory.category}:</span> ${skillCategory.items.join(', ')}</li>`;
-                    });
-                    skillsHTML += '</ul>';
-                    return skillsHTML;
-                },
-                projects: () => {
-                    let projectsHTML = '<span class="text-green-400">Projects:</span><div class="mt-2 space-y-2">';
-                    profileData.projects.forEach(project => {
-                        projectsHTML += `
-<div>
-    <h3 class="text-purple-400">${project.name}</h3>
-    <p class="text-sm">${project.description}</p>
-    <a href="${project.link}" target="_blank" class="text-cyan-400 hover:underline">${project.link.replace('https://', '')}</a>
-</div>
-                        `;
-                    });
-                    projectsHTML += '</div>';
-                    return projectsHTML;
-                },
-                contact: () => `
-<span class="text-green-400">Get in Touch:</span>
-<ul class="list-inside mt-2">
-    <li><span class="text-yellow-400">Email:</span> <a href="mailto:${profileData.email}" class="text-cyan-400 hover:underline">${profileData.email}</a></li>
-    <li><span class="text-yellow-400">LinkedIn:</span> <a href="https://www.linkedin.com/in/${profileData.linkedinUser}" target="_blank" class="text-cyan-400 hover:underline">linkedin.com/in/${profileData.linkedinUser}</a></li>
-    <li><span class="text-yellow-400">GitHub:</span> <a href="https://github.com/${profileData.githubUser}" target="_blank" class="text-cyan-400 hover:underline">github.com/${profileData.githubUser}</a></li>
-</ul>
-                `,
-                history: () => {
-                    return commandHistory.map((cmd, index) => `${index + 1}: ${cmd}`).join('<br>');
-                },
-                neofetch: () => {
-                    const asciiArt = `
-<pre class="text-cyan-400">
-    ██████╗  ██████╗ 
-    ██╔══██╗ ██╔══██╗
-    ██████╔╝ ██████╔╝
-    ██╔═══╝  ██╔═══╝ 
-    ██║      ██║     
-    ╚═╝      ╚═╝     
-</pre>
-                    `;
-
-                    const skills = profileData.skills.flatMap(s => s.items).join(', ');
-                    const projects = profileData.projects.map(p => p.name).join(', ');
-                    const randomMotto = quotes[Math.floor(Math.random() * quotes.length)];
-                    const mottoText = randomMotto.author ? `"${randomMotto.quote}" – ${randomMotto.author}` : `"${randomMotto.quote}"`;
-                    
-                    return `
-<div class="flex space-x-4">
-    ${asciiArt}
-    <div>
-        <p><span class="text-cyan-400">Name</span>: ${profileData.name}</p>
-        <p><span class="text-cyan-400">Role</span>: ${profileData.role}</p>
-        <p><span class="text-cyan-400">Skills</span>: ${skills}</p>
-        <p><span class="text-cyan-400">GitHub</span>: github.com/${profileData.githubUser}</p>
-        <p><span class="text-cyan-400">Projects</span>: ${projects}</p>
-        <p><span class="text-cyan-400">Contact</span>: ${profileData.email}</p>
-        <p><span class="text-cyan-400">Location</span>: ${profileData.location}</p>
-        <p><span class="text-cyan-400">Status</span>: ${profileData.status}</p>
-        <p class="text-yellow-300 italic">${mottoText}</p>
-    </div>
-</div>
-                    `;
-                },
-            };
+            // --- Data ---
+            const profileData = { name: "Prasanth Pradeep", role: "CSE Student | Web & AI Enthusiast", email: "prasanthpradeep@email.com", githubUser: "PrasanthPradeep", linkedinUser: "prasanth-pradeep-", about: "I am a passionate and creative CSE student with a knack for building beautiful and functional web applications. I specialize in Web Development and AI, and I'm always eager to learn new things and take on challenging projects.", skills: [{ category: "Languages", items: ["Python", "C++", "JavaScript", "TypeScript"] }, { category: "Web Dev", items: ["React", "Node.js", "HTML/CSS", "Tailwind CSS"] }, { category: "Concepts", items: ["DSA", "AI", "OOP"] }], projects: [{ name: "PromptPilot", description: "An AI-powered tool to help users craft better prompts.", link: "https://github.com/PrasanthPradeep/PromptPilot" }, { name: "Project Prism", description: "A web-based data visualization tool.", link: "https://github.com/PrasanthPradeep/ProjectPrism" }, { name: "Who’s Prashu?", description: "My personal portfolio website.", link: "https://github.com/PrasanthPradeep/prasanthp" }], location: "Kollam, Kerala, India", status: "Open to new opportunities", };
+            const quotes = [{ quote: "Talk is cheap. Show me the code.", author: "Linus Torvalds" }, { quote: "The best way to get started is to quit talking and begin doing.", author: "Walt Disney" }, { quote: "Code is like humor. When you have to explain it, it's bad.", author: "Cory House" }];
             
-            async function callGemini(prompt, chatHistory = []) {
+            // --- Virtual File System ---
+            const filesystem = { '/': { type: 'dir', children: ['home'] }, '/home': { type: 'dir', children: ['prasanth'] }, '/home/prasanth': { type: 'dir', children: ['about.txt', 'skills.txt', 'contact.txt', 'projects'] }, '/home/prasanth/about.txt': { type: 'file', content: profileData.about }, '/home/prasanth/skills.txt': { type: 'file', content: profileData.skills.map(s => `${s.category}:\n  - ${s.items.join('\n  - ')}`).join('\n\n') }, '/home/prasanth/contact.txt': { type: 'file', content: `Email: ${profileData.email}\nLinkedIn: https://linkedin.com/in/${profileData.linkedinUser}\nGitHub: https://github.com/${profileData.githubUser}` }, '/home/prasanth/projects': { type: 'dir', children: profileData.projects.map(p => `${p.name.toLowerCase().replace(/ /g, '-')}.md`) } };
+            profileData.projects.forEach(p => { const fileName = `${p.name.toLowerCase().replace(/ /g, '-')}.md`; filesystem[`/home/prasanth/projects/${fileName}`] = { type: 'file', content: `# ${p.name}\n\n${p.description}\n\nLink: ${p.link}` }; });
+
+            // --- Core Functions ---
+            function appendOutput(html) { output.innerHTML += html; output.scrollTop = output.scrollHeight; }
+            function displayWelcomeMessage() { output.innerHTML = ''; appendOutput(`<div class="flex items-center space-x-4"><img src="https://placehold.co/96x96/7aa2f7/1a1b26?text=PP" alt="Profile Picture" class="rounded-full border-2 border-[#7aa2f7] w-24 h-24 flex-shrink-0"><div class="flex flex-col justify-center"><p>Welcome to my Interactive Portfolio!</p><p class="mt-2">Type \`help\` or click an icon to see available commands.</p></div></div>`); }
+            
+            async function callGemini(prompt, chatHistory = [], speaker = 'AI') {
                 const loadingMessageId = `loading-${Date.now()}`;
-                appendOutput(`<div id="${loadingMessageId}" class="flex items-center"><div class="animate-spin rounded-full h-4 w-4 border-b-2 border-green-400 mr-2"></div>Thinking...</div>`);
-                const apiKey = "";
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                const speakerColor = speaker === 'AI' ? 'text-gray-400' : 'text-cyan-400';
+                appendOutput(`<div id="${loadingMessageId}" class="mt-2 pt-2 border-t border-slate-700"><div class="flex"><strong class="${speakerColor} w-24 flex-shrink-0">${speaker}:&nbsp;&nbsp;</strong><div class="flex-grow flex items-center"><div class="animate-spin rounded-full h-4 w-4 border-b-2 border-green-400 mr-2"></div>Thinking...</div></div></div>`);
+                
+                const apiKey = ""; const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
                 const contents = [...chatHistory, { role: "user", parts: [{ text: prompt }] }];
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ contents })
-                    });
-                    if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
-                    const result = await response.json();
-                    const loadingElement = document.getElementById(loadingMessageId);
-                    if (result.candidates && result.candidates.length > 0) {
-                        const text = result.candidates[0].content.parts[0].text;
-                        loadingElement.remove();
-                        return text;
-                    } else {
-                        loadingElement.innerHTML = `<span class="text-red-500">Error:</span> Could not get a response from the AI.`;
-                        return null;
+                let attempts = 0; const maxAttempts = 3;
+                while (attempts < maxAttempts) {
+                    try {
+                        const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents }) });
+                        if (!response.ok) { if (response.status === 429 || response.status >= 500) { throw new Error(`API request failed with status ${response.status}`); } else { const errorResult = await response.json(); throw new Error(`API Error: ${errorResult.error?.message || response.statusText}`); } }
+                        const result = await response.json();
+                        const loadingElement = document.getElementById(loadingMessageId);
+                        if (loadingElement) loadingElement.remove();
+                        if (result.candidates && result.candidates.length > 0) { return result.candidates[0].content.parts[0].text; } else { throw new Error("Could not get a valid response from the AI."); }
+                    } catch (error) {
+                        attempts++;
+                        if (attempts >= maxAttempts) { console.error("AI Error after max retries:", error); const loadingElement = document.getElementById(loadingMessageId); if (loadingElement) loadingElement.innerHTML = `<span class="text-red-500">Error:</span> Failed to connect to the AI service. ${error.message}`; return null; }
+                        const delay = Math.pow(2, attempts - 1) * 1000;
+                        await new Promise(resolve => setTimeout(resolve, delay));
                     }
-                } catch (error) {
-                    console.error("AI Error:", error);
-                    const loadingElement = document.getElementById(loadingMessageId);
-                    loadingElement.innerHTML = `<span class="text-red-500">Error:</span> Failed to connect to the AI service. ${error.message}`;
-                    return null;
                 }
             }
 
-            function appendOutput(html) {
-                output.innerHTML += html;
-                output.scrollTop = output.scrollHeight;
-            }
+            // --- Command Definitions & Handling ---
+            const commands = {
+                help: `
+                    <span class="text-green-400">Available Commands:</span>
+                    <ul class="list-inside list-disc ml-4">
+                        <li><span class="text-blue-400">about</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Displays my professional summary.</li>
+                        <li><span class="text-blue-400">skills</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Lists my technical skills.</li>
+                        <li><span class="text-blue-400">projects</span> &nbsp;&nbsp;&nbsp;&nbsp;- Shows my recent projects.</li>
+                        <li><span class="text-blue-400">contact</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Provides my contact information.</li>
+                        <li><span class="text-blue-400">neofetch</span> &nbsp;&nbsp;&nbsp;&nbsp;- ✨ Display system information.</li>
+                        <li><span class="text-blue-400">ls [path]</span> &nbsp;&nbsp;&nbsp;- List directory contents.</li>
+                        <li><span class="text-blue-400">cd [dir]</span> &nbsp;&nbsp;&nbsp;&nbsp;- Change directory.</li>
+                        <li><span class="text-blue-400">cat [file]</span> &nbsp;&nbsp;&nbsp;- Display file content.</li>
+                        <li><span class="text-blue-400">ai</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ✨ Start an interactive chat session with the AI.</li>
+                        <li><span class="text-blue-400">ai interview</span> - ✨ Start a mock interview with the AI.</li>
+                        <li><span class="text-blue-400">sudo hire</span> &nbsp;&nbsp;&nbsp;- ✨ Hire me!</li>
+                        <li><span class="text-blue-400">clear</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Clears the terminal screen.</li>
+                        <li><span class="text-blue-400">history</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Shows command history.</li>
+                    </ul>`,
+                about: () => `<div class="flex items-center space-x-4"><img src="https://placehold.co/96x96/7aa2f7/1a1b26?text=PP" alt="Profile Picture" class="rounded-full border-2 border-[#7aa2f7] w-24 h-24 flex-shrink-0"><div class="flex flex-col justify-center"><span class="text-green-400">About Me:</span><p class="mt-1">${profileData.about}</p></div></div>`,
+                skills: () => `<span class="text-green-400">Technical Skills:</span><ul class="list-inside mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">${profileData.skills.map(sc => `<li><span class="text-yellow-400">${sc.category}:</span> ${sc.items.join(', ')}</li>`).join('')}</ul>`,
+                projects: () => `<span class="text-green-400">Projects:</span><div class="mt-2 space-y-2">${profileData.projects.map(p => `<div><h3 class="text-purple-400">${p.name}</h3><p class="text-sm">${p.description}</p><a href="${p.link}" target="_blank" class="text-cyan-400 hover:underline">${p.link.replace('https://', '')}</a></div>`).join('')}</div>`,
+                contact: () => `<span class="text-green-400">Get in Touch:</span><ul class="list-inside mt-2"><li><span class="text-yellow-400">Email:</span> <a href="mailto:${profileData.email}" class="text-cyan-400 hover:underline">${profileData.email}</a></li><li><span class="text-yellow-400">LinkedIn:</span> <a href="https://www.linkedin.com/in/${profileData.linkedinUser}" target="_blank" class="text-cyan-400 hover:underline">linkedin.com/in/${profileData.linkedinUser}</a></li><li><span class="text-yellow-400">GitHub:</span> <a href="https://github.com/${profileData.githubUser}" target="_blank" class="text-cyan-400 hover:underline">github.com/${profileData.githubUser}</a></li></ul>`,
+                history: () => commandHistory.map((cmd, index) => `${index + 1}: ${cmd}`).join('<br>'),
+                neofetch: () => { const asciiArt = `<pre class="text-cyan-400">\n  ██████╗  ██████╗ \n  ██╔══██╗ ██╔══██╗\n  ██████╔╝ ██████╔╝\n  ██╔═══╝  ██╔═══╝ \n  ██║      ██║     \n  ╚═╝      ╚═╝     \n</pre>`; const randomMotto = quotes[Math.floor(Math.random() * quotes.length)]; return `<div class="flex space-x-4">${asciiArt}<div><p><span class="text-cyan-400">Name</span>: ${profileData.name}</p><p><span class="text-cyan-400">Role</span>: ${profileData.role}</p><p><span class="text-cyan-400">GitHub</span>: github.com/${profileData.githubUser}</p><p><span class="text-cyan-400">Contact</span>: ${profileData.email}</p><p><span class="text-cyan-400">Location</span>: ${profileData.location}</p><p><span class="text-cyan-400">Status</span>: ${profileData.status}</p><p class="text-yellow-300 italic">"${randomMotto.quote}" – ${randomMotto.author}</p></div></div>`; },
+            };
+            
+            // --- File System Command Implementations ---
+            function resolvePath(path) { if (path.startsWith('/')) return path; const parts = currentPath.split('/').filter(p => p); const pathParts = path.split('/').filter(p => p); for (const part of pathParts) { if (part === '..') { if (parts.length > 0) parts.pop(); } else if (part !== '.') { parts.push(part); } } return '/' + parts.join('/'); }
+            function ls(args) { const path = args[0] ? resolvePath(args[0]) : currentPath; const node = filesystem[path]; if (node && node.type === 'dir') { const content = node.children.map(child => { const childPath = `${path === '/' ? '' : path}/${child}`; return filesystem[childPath]?.type === 'dir' ? `<span class="text-blue-400">${child}/</span>` : child; }).join('  '); appendOutput(content); } else { appendOutput(`<span class="text-red-500">ls: cannot access '${args[0] || '.'}': No such file or directory</span>`); } }
+            function cd(args) { const targetPath = args[0] || '/home/prasanth'; const newPath = resolvePath(targetPath); if (filesystem[newPath] && filesystem[newPath].type === 'dir') { currentPath = newPath; const displayPath = currentPath.startsWith('/home/prasanth') ? '~' + currentPath.substring('/home/prasanth'.length) : currentPath; promptDir.textContent = displayPath; } else { appendOutput(`<span class="text-red-500">cd: no such file or directory: ${targetPath}</span>`); } }
+            function cat(args) { const targetPath = args[0]; if (!targetPath) { appendOutput(`<span class="text-red-500">cat: missing operand</span>`); return; } const path = resolvePath(targetPath); const node = filesystem[path]; if (node && node.type === 'file') { appendOutput(`<pre class="whitespace-pre-wrap">${node.content}</pre>`); } else if (node && node.type === 'dir') { appendOutput(`<span class="text-red-500">cat: ${targetPath}: Is a directory</span>`); } else { appendOutput(`<span class="text-red-500">cat: ${targetPath}: No such file or directory</span>`); } }
 
-            function displayWelcomeMessage() {
-                output.innerHTML = '';
-                welcomeMessage.forEach(line => appendOutput(`<div>${line}</div>`));
+            // --- AI & Special Mode Handlers ---
+
+            function getFormattedDate() {
+                return new Date().toLocaleString('en-IN', {
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+                    hour: 'numeric', minute: 'numeric', timeZoneName: 'short'
+                });
             }
 
             async function handleAICommand(args) {
-                const subCommand = args[0];
-                const promptArgs = args.slice(1).join(' ');
-                if (subCommand === 'suggest') {
-                    const section = promptArgs.toLowerCase();
-                    if (commands[section] && typeof commands[section] === 'string') {
-                        const contentToImprove = commands[section].replace(/<[^>]*>/g, ' ').trim();
-                        const prompt = `You are a professional career coach. Rewrite the following portfolio section to be more impactful and professional. Keep it concise. Format your response in simple HTML.\n\nSection to improve:\n"${contentToImprove}"`;
-                        const suggestion = await callGemini(prompt);
-                        if (suggestion) appendOutput(`<div class="p-2 border-l-2 border-green-400 my-2"><strong>✨ AI Suggestion for '${section}':</strong>${suggestion}</div>`);
-                    } else {
-                        appendOutput(`<span class="text-red-500">Error:</span> Invalid section '${section}'. Try 'about', 'skills', or 'projects'.`);
-                    }
-                } else if (subCommand === 'interview') {
+                if (args.length === 0) {
+                    await startAIChat();
+                } else if (args[0] === 'interview') {
                     startInterview();
                 } else {
-                    const prompt = args.join(' ');
-                    const basePrompt = "You are a helpful assistant in a portfolio terminal. Keep answers concise and use simple HTML for formatting.";
-                    const chatHistory = [{ role: "user", parts: [{ text: basePrompt }] }, { role: "model", parts: [{ text: "Okay, I'm ready to help!" }] }];
-                    const response = await callGemini(prompt, chatHistory);
-                    if (response) appendOutput(`<span class="text-green-400">AI:</span> ${response}`);
+                    appendOutput(`<div><span class="text-red-500">Unknown 'ai' command.</span> Use 'ai' to start a chat or 'ai interview' for a mock interview.</div>`);
                 }
             }
+
+            async function startAIChat() {
+                aiChatMode = true;
+                promptPrefix.innerHTML = `<span class="text-green-400 mr-2">[AI Chat] ></span>`;
+                appendOutput(`<div class="text-green-400">Starting AI chat session... Type 'exit' to end.</div>`);
+                const currentDate = getFormattedDate();
+                aiChatHistory = [
+                    { role: "user", parts: [{ text: `You are a helpful assistant in a terminal. The user is Prasanth Pradeep.
+- Format all responses using simple HTML tags only (e.g., <p>, <strong>, <ul>, <li>).
+- DO NOT use Markdown (no **, *, etc.).
+- For lists, use <ul> and <li>. For paragraphs, use <p>.
+- Keep answers concise and clear.
+- Current context: Date is ${currentDate}, Location is ${profileData.location}.` }] },
+                    { role: "model", parts: [{ text: "Understood. I will provide concise, HTML-formatted responses without using Markdown. How can I help you?" }] }
+                ];
+                appendOutput(`<div class="mt-2 pt-2 border-t border-slate-700"><div class="flex"><strong class="text-green-400 w-24 flex-shrink-0">AI:&nbsp;&nbsp;</strong><div class="flex-grow"><p>Hello! I'm ready to chat. How can I help you today?</p></div></div></div>`);
+            }
             
+            async function handleAIChatResponse(prompt) {
+                appendOutput(`<div class="mt-2 pt-2 border-t border-slate-700"><div class="flex"><strong class="text-purple-400 w-24 flex-shrink-0">You:&nbsp;&nbsp;</strong><div class="flex-grow">${prompt}</div></div></div>`);
+                aiChatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const response = await callGemini(prompt, aiChatHistory, 'AI');
+                if (response) {
+                    appendOutput(`<div class="mt-2 pt-2 border-t border-slate-700"><div class="flex"><strong class="text-green-400 w-24 flex-shrink-0">AI:&nbsp;&nbsp;</strong><div class="flex-grow">${response}</div></div></div>`);
+                    aiChatHistory.push({ role: "model", parts: [{ text: response }] });
+                }
+            }
+
+            function endAIChat() {
+                aiChatMode = false;
+                promptPrefix.innerHTML = `<span class="text-[#7aa2f7]">user@host</span><span class="text-gray-400 mx-1">:</span><span id="prompt-dir" class="text-purple-400">~</span><span class="text-gray-400 mr-2">$</span>`;
+                promptDir = document.getElementById('prompt-dir');
+                appendOutput(`<div class="text-green-400">AI chat session ended.</div>`);
+                aiChatHistory = [];
+                cd([]);
+            }
+
             async function startInterview() {
                 interviewMode = true;
                 promptPrefix.innerHTML = `<span class="text-yellow-400 mr-2">[Interview Mode] ></span>`;
                 appendOutput(`<div class="text-yellow-400">Starting mock interview... Type 'exit' to end the session.</div>`);
+                const currentDate = getFormattedDate();
                 interviewHistory = [
-                    { role: "user", parts: [{ text: "You are a friendly but professional interviewer for a software developer role. Ask me one common behavioral or technical question. After I answer, provide brief feedback and then ask the next question." }] },
-                    { role: "model", parts: [{ text: "Of course. Let's begin." }] }
+                    { role: "user", parts: [{ text: `You are a professional interviewer for a software developer role.
+- Ask one common behavioral or technical question at a time.
+- After I answer, provide brief, constructive feedback, then ask the next question.
+- Format all your responses using simple HTML tags only (<p>, <strong>, <ul>, <li>).
+- DO NOT use Markdown.
+- Current context: Date is ${currentDate}, Location is ${profileData.location}.` }] },
+                    { role: "model", parts: [{ text: "Understood. I will act as a professional interviewer and provide feedback in HTML format. Let's begin." }] }
                 ];
-                const firstQuestion = await callGemini("Ask me the first question.", interviewHistory);
-                if (firstQuestion) {
-                    appendOutput(`<div class="mt-2"><strong class="text-cyan-400">Interviewer:</strong> ${firstQuestion}</div>`);
-                    interviewHistory.push({ role: "model", parts: [{ text: firstQuestion }] });
+                const firstQuestion = await callGemini("Ask me the first question.", interviewHistory, 'Interviewer');
+                if (firstQuestion) { 
+                    appendOutput(`<div class="mt-2 pt-2 border-t border-slate-700"><div class="flex"><strong class="text-cyan-400 w-25 flex-shrink-0">Interviewer:&nbsp;&nbsp;&nbsp;</strong><div class="flex-grow">${firstQuestion}</div></div></div>`);
+                    interviewHistory.push({ role: "model", parts: [{ text: firstQuestion }] }); 
                 }
             }
-            
+
             async function handleInterviewResponse(answer) {
-                appendOutput(`<div><strong class="text-purple-400">You:</strong> ${answer}</div>`);
+                appendOutput(`<div class="mt-2 pt-2 border-t border-slate-700"><div class="flex"><strong class="text-purple-400 w-25 flex-shrink-0">You:&nbsp;&nbsp;&nbsp;</strong><div class="flex-grow">${answer}</div></div></div>`);
                 interviewHistory.push({ role: "user", parts: [{ text: answer }] });
-                const nextResponse = await callGemini("Provide brief feedback on my answer and ask the next question.", interviewHistory);
-                if (nextResponse) {
-                    appendOutput(`<div class="mt-2"><strong class="text-cyan-400">Interviewer:</strong> ${nextResponse}</div>`);
-                    interviewHistory.push({ role: "model", parts: [{ text: nextResponse }] });
+                const nextResponse = await callGemini("Provide brief feedback on my answer and ask the next question.", interviewHistory, 'Interviewer');
+                if (nextResponse) { 
+                    appendOutput(`<div class="mt-2 pt-2 border-t border-slate-700"><div class="flex"><strong class="text-cyan-400 w-25 flex-shrink-0">Interviewer:&nbsp;&nbsp;&nbsp;</strong><div class="flex-grow">${nextResponse}</div></div></div>`);
+                    interviewHistory.push({ role: "model", parts: [{ text: nextResponse }] }); 
                 }
             }
-            
+
             function endInterview() {
                 interviewMode = false;
-                promptPrefix.innerHTML = `<span class="text-[#7aa2f7]">user@host</span><span class="text-gray-400 mx-1">:</span><span class="text-purple-400">~</span><span class="text-gray-400 mr-2">$</span>`;
+                promptPrefix.innerHTML = `<span class="text-[#7aa2f7]">user@host</span><span class="text-gray-400 mx-1">:</span><span id="prompt-dir" class="text-purple-400">~</span><span class="text-gray-400 mr-2">$</span>`;
+                promptDir = document.getElementById('prompt-dir');
                 appendOutput(`<div class="text-yellow-400">Interview session ended.</div>`);
                 interviewHistory = [];
+                cd([]);
             }
-
-            function startHireProcess() {
-                hireMode = 'name';
-                promptPrefix.innerHTML = `<span class="text-yellow-400 mr-2">[Hiring Mode] ></span>`;
-                appendOutput(`<div class="text-yellow-400">What is your full name?</div>`);
-            }
-
+            
+            function startHireProcess() { hireMode = 'name'; promptPrefix.innerHTML = `<span class="text-yellow-400 mr-2">[Hiring Mode] ></span>`; appendOutput(`<div class="text-yellow-400">What is your full name?</div>`); }
             function handleHireResponse(response) {
                 switch (hireMode) {
-                    case 'name':
-                        hireData.name = response;
-                        hireMode = 'organization';
-                        appendOutput(`<div class="text-yellow-400">What is your organization's name?</div>`);
-                        break;
+                    case 'name': hireData.name = response; hireMode = 'organization'; appendOutput(`<div class="text-yellow-400">What is your organization's name?</div>`); break;
                     case 'organization':
                         hireData.organization = response;
                         appendOutput(`<div class="text-green-400">Thank you, ${hireData.name} from ${hireData.organization}. I appreciate you taking the first step to hire me.</div>`);
-                        
-                        appendOutput(`
-                            <span class="text-green-400">Access granted ✅</span>
-                            <p>Initializing hiring sequence...</p>
-                            <p>&gt;&gt; Congratulations, you just unlocked your best hire!</p>
-                        `);
-
-                        setTimeout(() => {
-                            const email = profileData.email;
-                            const subject = encodeURIComponent("Hiring Inquiry from Your Interactive Portfolio");
-                            const body = encodeURIComponent(
-                                `Hello Prasanth,\n\nMy name is ${hireData.name} from ${hireData.organization}.\n\nI came across your impressive interactive terminal portfolio and was very impressed with your skills and projects.\n\nI would like to discuss a potential opportunity with you. Please let me know your availability for a brief chat.\n\nBest regards,`
-                            );
-                            window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
-                            endHireProcess();
-                        }, 2000);
+                        appendOutput(`<p>Initializing hiring sequence...</p><p>&gt;&gt; Congratulations, you just unlocked your best hire!</p>`);
+                        setTimeout(() => { const subject = encodeURIComponent("Hiring Inquiry from Your Interactive Portfolio"); const body = encodeURIComponent(`Hello Prasanth,\n\nMy name is ${hireData.name} from ${hireData.organization}.\n\nI came across your impressive interactive terminal portfolio and was very impressed with your skills and projects.\n\nI would like to discuss a potential opportunity with you. Please let me know your availability for a brief chat.\n\nBest regards,`); window.location.href = `mailto:${profileData.email}?subject=${subject}&body=${body}`; endHireProcess(); }, 2000);
                         break;
                 }
             }
+            function endHireProcess() { hireMode = false; hireData = {}; promptPrefix.innerHTML = `<span class="text-[#7aa2f7]">user@host</span><span class="text-gray-400 mx-1">:</span><span id="prompt-dir" class="text-purple-400">~</span><span class="text-gray-400 mr-2">$</span>`; promptDir = document.getElementById('prompt-dir'); cd([]); }
 
-            function endHireProcess() {
-                hireMode = false;
-                hireData = {};
-                promptPrefix.innerHTML = `<span class="text-[#7aa2f7]">user@host</span><span class="text-gray-400 mx-1">:</span><span class="text-purple-400">~</span><span class="text-gray-400 mr-2">$</span>`;
-            }
-
+            // --- Main Command Processor ---
             async function processCommand(command) {
+                if (aiChatMode) {
+                    if (command.toLowerCase().trim() === 'exit') endAIChat();
+                    else await handleAIChatResponse(command);
+                    return;
+                }
                 if (interviewMode) {
                     if (command.toLowerCase().trim() === 'exit') endInterview();
-                    else handleInterviewResponse(command);
+                    else await handleInterviewResponse(command);
                     return;
                 }
-                if (hireMode) {
-                    handleHireResponse(command);
-                    return;
-                }
+                if (hireMode) { handleHireResponse(command); return; }
 
-                commandHistory.unshift(command);
-                historyIndex = -1;
-                appendOutput(`<div class="flex"><span class="text-[#7aa2f7]">user@host</span><span class="text-gray-400 mx-1">:</span><span class="text-purple-400">~</span><span class="text-gray-400 mr-2">$</span><span>${command}</span></div>`);
-                const [cmd, ...args] = command.trim().split(' ');
+                commandHistory.unshift(command); historyIndex = -1;
+                const displayPath = promptDir.textContent;
+                appendOutput(`<div class="flex"><span class="text-[#7aa2f7]">user@host</span><span class="text-gray-400 mx-1">:</span><span class="text-purple-400">${displayPath}</span><span class="text-gray-400 mr-2">$</span><span>${command}</span></div>`);
+                const [cmd, ...args] = command.trim().split(' ').filter(Boolean);
+                if (!cmd) return;
                 const lowerCmd = cmd.toLowerCase();
 
-                if (lowerCmd === 'sudo' && args[0] === 'hire') {
-                    startHireProcess();
-                } else if (lowerCmd === 'ai') {
-                    handleAICommand(args);
-                } else if (lowerCmd in commands) {
-                    const commandToRun = commands[lowerCmd];
-                    if (typeof commandToRun === 'function') {
-                        const result = await commandToRun();
-                        appendOutput(result);
-                    } else {
-                        appendOutput(commandToRun);
-                    }
-                } else if (lowerCmd === 'clear') {
-                    displayWelcomeMessage();
-                } else {
-                    appendOutput(`<div><span class="text-red-500">Command not found:</span> ${command}. Type 'help' for a list of commands.</div>`);
-                }
+                if (lowerCmd === 'sudo' && args[0] === 'hire') { startHireProcess(); } 
+                else if (lowerCmd === 'ai') { await handleAICommand(args); } 
+                else if (lowerCmd === 'ls') { ls(args); } 
+                else if (lowerCmd === 'cd') { cd(args); } 
+                else if (lowerCmd === 'cat') { cat(args); } 
+                else if (lowerCmd in commands) { const commandToRun = commands[lowerCmd]; const result = (typeof commandToRun === 'function') ? await commandToRun() : commandToRun; appendOutput(result); } 
+                else if (lowerCmd === 'clear') { displayWelcomeMessage(); } 
+                else { appendOutput(`<div><span class="text-red-500">Command not found:</span> ${command}. Type 'help' for a list of commands.</div>`); }
             }
 
-            const updateCursor = () => {
-                mirror.textContent = input.value;
-                // Add a small offset to the cursor position
-                cursor.style.left = `${mirror.offsetWidth + 2}px`;
-            };
-
+            // --- Event Listeners & UI Handlers ---
+            const updateCursor = () => { mirror.textContent = input.value; cursor.style.left = `${mirror.offsetWidth}px`; };
             input.addEventListener('input', updateCursor);
-
-            input.addEventListener('focus', () => {
-                cursor.classList.add('blinking');
-                updateCursor();
-            });
-
-            input.addEventListener('blur', () => {
-                cursor.classList.remove('blinking');
-            });
-
+            input.addEventListener('focus', () => cursor.classList.add('blinking'));
+            input.addEventListener('blur', () => cursor.classList.remove('blinking'));
             input.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    const command = input.value;
-                    if (command) {
-                        processCommand(command);
-                        input.value = '';
-                        updateCursor(); // Update cursor after clearing input
-                    }
-                } else if (e.key === 'ArrowUp' && !interviewMode) {
-                    if (historyIndex < commandHistory.length - 1) {
-                        historyIndex++;
-                        input.value = commandHistory[historyIndex];
-                        updateCursor();
-                    }
-                } else if (e.key === 'ArrowDown' && !interviewMode) {
-                    if (historyIndex > 0) {
-                        historyIndex--;
-                        input.value = commandHistory[historyIndex];
-                    } else {
-                        historyIndex = -1;
-                        input.value = '';
-                    }
-                    updateCursor();
-                }
+                if (e.key === 'Enter') { const command = input.value; processCommand(command); input.value = ''; updateCursor(); } 
+                else if (e.key === 'ArrowUp') { e.preventDefault(); if (!aiChatMode && !interviewMode && historyIndex < commandHistory.length - 1) { historyIndex++; input.value = commandHistory[historyIndex]; updateCursor(); } } 
+                else if (e.key === 'ArrowDown') { e.preventDefault(); if (!aiChatMode && !interviewMode && historyIndex > 0) { historyIndex--; input.value = commandHistory[historyIndex]; } else { historyIndex = -1; input.value = ''; } updateCursor(); }
             });
-            
-            // --- Desktop Icon Listeners ---
-            document.querySelectorAll('.desktop-icon[data-command]').forEach(icon => {
-                icon.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const command = icon.getAttribute('data-command');
-                    processCommand(command);
-                });
-            });
+            document.querySelectorAll('.desktop-icon[data-command]').forEach(icon => { icon.addEventListener('click', (e) => { e.preventDefault(); processCommand(icon.getAttribute('data-command')); }); });
 
-            // --- Draggable Terminal Window ---
+            // --- Draggable Terminal Window Logic ---
             const terminalContainer = document.getElementById('terminal-container');
             const terminalHeader = document.getElementById('terminal-header');
-
-            let active = false;
-            let currentX;
-            let currentY;
-            let initialX;
-            let initialY;
-            let xOffset = 0;
-            let yOffset = 0;
-            let isFirstDrag = true;
-
+            let active = false, xOffset = 0, yOffset = 0, isFirstDrag = true;
             terminalHeader.addEventListener("mousedown", dragStart);
             document.addEventListener("mouseup", dragEnd);
             document.addEventListener("mousemove", drag);
+            function dragStart(e) { if (isFirstDrag) { const rect = terminalContainer.getBoundingClientRect(); terminalContainer.style.left = `${rect.left}px`; terminalContainer.style.top = `${rect.top}px`; terminalContainer.style.transform = 'none'; isFirstDrag = false; } xOffset = e.clientX - terminalContainer.offsetLeft; yOffset = e.clientY - terminalContainer.offsetTop; active = true; }
+            function dragEnd() { active = false; }
+            function drag(e) { if (active) { e.preventDefault(); terminalContainer.style.left = `${e.clientX - xOffset}px`; terminalContainer.style.top = `${e.clientY - yOffset}px`; } }
 
-            function dragStart(e) {
-                if (isFirstDrag) {
-                    const rect = terminalContainer.getBoundingClientRect();
-                    terminalContainer.style.left = `${rect.left}px`;
-                    terminalContainer.style.top = `${rect.top}px`;
-                    terminalContainer.style.transform = 'none';
-                    isFirstDrag = false;
-                }
-                
-                xOffset = e.clientX - terminalContainer.offsetLeft;
-                yOffset = e.clientY - terminalContainer.offsetTop;
-
-                active = true;
-            }
-
-            function dragEnd(e) {
-                active = false;
-            }
-
-            function drag(e) {
-                if (active) {
-                    e.preventDefault();
-                
-                    currentX = e.clientX - xOffset;
-                    currentY = e.clientY - yOffset;
-                
-                    terminalContainer.style.left = `${currentX}px`;
-                    terminalContainer.style.top = `${currentY}px`;
-                }
-            }
-
+            // --- Initial Load ---
             terminal.addEventListener('click', () => input.focus());
             displayWelcomeMessage();
-            
-            // Initial cursor setup
             cursor.classList.add('blinking');
             updateCursor();
         });
