@@ -37,7 +37,7 @@ const Home = () => {
     
     // Reset after a short delay to allow re-triggering
     setTimeout(() => setExternalCommand(null), 100);
-  }, [terminalVisible, terminalState]);
+  }, [terminalVisible]);
 
   const handleTerminalToggle = useCallback(() => {
     setTerminalVisible(prev => {

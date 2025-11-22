@@ -39,6 +39,7 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
   // Welcome message
   useEffect(() => {
     addWelcomeMessage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Handle external commands from desktop icons
@@ -46,6 +47,7 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
     if (externalCommand && isVisible) {
       processCommand(externalCommand);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [externalCommand, isVisible]);
 
   const addWelcomeMessage = () => {
@@ -53,7 +55,7 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
       type: 'welcome',
       content: `
         <div id="welcome-message" class="flex items-center space-x-4">
-          <img src="./images/profile.jpg" alt="Profile Picture" class="rounded-full border-2 border-[#7aa2f7] w-24 h-24 flex-shrink-0" onerror="this.src='./images/profile.jpg'">
+          <img src="/images/profile.jpg" alt="Profile Picture" class="rounded-full border-2 border-[#7aa2f7] w-24 h-24 flex-shrink-0" onerror="this.src='/images/profile.jpg'">
           <div class="flex flex-col justify-center">
             <p>Welcome to my Interactive Portfolio!</p>
             <p class="mt-2">Type \`help\` or click an icon to see available commands.</p>
@@ -87,7 +89,6 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
       const taskbarIcon = document.querySelector('.taskbar-icon[data-command="terminal"]');
       
       if (taskbarIcon && !isAnimating) {
-        const iconRect = taskbarIcon.getBoundingClientRect();
         
         // Start from the icon position with proper centering
         terminalRef.current.style.opacity = '0';
@@ -209,6 +210,7 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
         <span class="text-red-500">Command not found:</span> ${command}. Type 'help' for a list of commands.
       </div>
     `);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [commands, ls, cd, cat, getDisplayPath, appendOutput, setCommandHistory, onToggle]);
 
   const handleInputChange = (e) => {

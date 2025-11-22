@@ -4,7 +4,6 @@ const ParticleBackground = () => {
   const canvasRef = useRef(null);
   const particlesArrayRef = useRef([]);
   const mouseRef = useRef({ x: null, y: null, radius: 0 });
-  const animationFrameRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -117,7 +116,7 @@ const ParticleBackground = () => {
       }
       
       connect();
-      animationFrameRef.current = requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
     };
 
     const handleMouseMove = (event) => {
@@ -150,8 +149,8 @@ const ParticleBackground = () => {
 
     // Cleanup
     return () => {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
       }
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseout', handleMouseOut);

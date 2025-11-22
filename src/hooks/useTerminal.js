@@ -66,7 +66,7 @@ export const useTerminal = () => {
     
     about: () => `
       <div class="flex items-center space-x-4">
-        <img src="./images/profile.jpg" alt="Profile Picture" class="rounded-full border-2 border-[#7aa2f7] w-24 h-24 flex-shrink-0" onerror="this.src='./images/profile.jpg'">
+        <img src="/images/profile.jpg" alt="Profile Picture" class="rounded-full border-2 border-[#7aa2f7] w-24 h-24 flex-shrink-0" onerror="this.src='/images/profile.jpg'">
         <div class="flex flex-col justify-center">
           <span class="text-green-400">About Me:</span>
           <p class="mt-1">${profileData.about}</p>
