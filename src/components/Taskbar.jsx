@@ -1,4 +1,5 @@
 import React, { useState, useEffect, memo } from 'react';
+import ToggleSiteSwitch from './ToggleSiteSwitch';
 
 const Taskbar = ({ onCommandClick, terminalActive }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -85,13 +86,7 @@ const Taskbar = ({ onCommandClick, terminalActive }) => {
   return (
     <div 
       id="taskbar"
-      className="fixed bottom-0 left-0 w-full h-10 z-50 flex items-center justify-between px-2.5"
-      style={{
-        background: 'rgba(36, 40, 59, 0.75)',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
-        borderTop: '1px solid rgba(74, 79, 105, 0.4)'
-      }}
+      className="fixed bottom-0 left-0 w-full h-10 z-10 flex items-center justify-between px-2 bg-[rgba(36,40,59,0.75)] backdrop-blur border-t border-[rgba(74,79,105,0.4)]"
     >
       <div className="flex items-center">
         {taskbarIcons.map((icon) => (
@@ -119,13 +114,14 @@ const Taskbar = ({ onCommandClick, terminalActive }) => {
           </button>
         ))}
       </div>
-      <div 
-        id="taskbar-clock" 
-        className="text-xs font-medium text-[#c0caf5] pr-2.5 text-right"
-      >
-        {formatTime()}
-        <br />
-        {formatDate()}
+
+      <div className="flex items-center">
+        <ToggleSiteSwitch />
+        <div id="taskbar-clock" className="ml-3 text-[12px] font-medium text-[#c0caf5]">
+          {formatTime()}
+          <br />
+          {formatDate()}
+        </div>
       </div>
     </div>
   );
