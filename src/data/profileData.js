@@ -1,11 +1,12 @@
 // Profile data for the portfolio
 export const profileData = {
-  name: "Prasanth Pradeep",
+  name: "Prasanth P",
   role: "CSE Student | Web & AI Enthusiast",
-  email: "prasanthpradeep@email.com",
+  email: "programmerprasanth@proton.me",
   githubUser: "PrasanthPradeep",
   linkedinUser: "prasanth1010000",
   instagramUser: "prasanth__p_",
+  xUser: "prasanth__p_",
   about: "I am a passionate and creative CSE student with a knack for building beautiful and functional web applications. I specialize in Web Development and AI, and I'm always eager to learn new things and take on challenging projects.",
   skills: [
     { category: "Languages", items: ["Python", "C++", "JavaScript", "TypeScript"] },
@@ -14,20 +15,22 @@ export const profileData = {
   ],
   projects: [
     {
-      name: "PromptPilot",
-      description: "An AI-powered tool to help users craft better prompts.",
-      link: "https://github.com/Prismaibrowser/web",
+      name: "Prism Browser Webpage",
+      description: "An modern webpage for the Prism Browser showcasing its features and download links.",
+      link: "https://prismbrowser.tech",
       repo: "https://github.com/Prismaibrowser/web"
     },
     {
-      name: "Project Prism",
-      description: "A web-based data visualization tool.",
-      link: "https://github.com/PrasanthPradeep/ProjectPrism"
+      name: "KTU Grade Analyser",
+      description: "An useful tool to analyze and visualize KTU grades.",
+      link: "https://ktugrade.vercel.app/",
+      repo: "https://github.com/PrasanthPradeep/ktugrade"
     },
     {
-      name: "Who's Prashu?",
-      description: "My personal portfolio website.",
-      link: "https://github.com/PrasanthPradeep/prasanthp"
+      name: "IEEE Aithon 2.0 Website",
+      description: "Official website for IEEE SB CEK Aithon 2.0 event.",
+      link: "https://aithon.ieeesbcek.org/",
+      repo: "https://github.com/PrasanthPradeep/ieee-cek-aithon"
     }
   ],
   location: "Kollam, Kerala, India",
