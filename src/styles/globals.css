@@ -14,7 +14,7 @@
 
 body {
   font-family: 'Fira Code', monospace;
-  background-color: #1a1b26;
+  background-color: #0C0D10;
   overflow: hidden;
 }
 
@@ -90,16 +90,18 @@ body {
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-/* Glassmorphism effects */
+/* Glassmorphism styles for a modern, blurred background effect */
 .glass-effect {
-  background: rgba(36, 40, 59, 0.65);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(74, 79, 105, 0.4);
+  background: rgba(21, 22, 30, 0.75); /* #15161E with 75% opacity */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(74, 79, 105, 0.3);
 }
 
 .glass-header-footer {
-  background: rgba(30, 30, 46, 0.5);
+  background: rgba(21, 22, 30, 0.85); /* #15161E with 85% opacity - slightly more opaque for header */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 /* Links */

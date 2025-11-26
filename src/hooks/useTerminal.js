@@ -55,44 +55,25 @@ export const useTerminal = () => {
         <li><span class="text-blue-400">clear</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Clears the terminal screen.</li>
         <li><span class="text-blue-400">history</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Shows command history.</li>
       </ul>`,
-    
-    social: () => `
-      <span class="text-green-400">Connect with Me:</span>
-      <ul class="list-inside mt-2">
-        <li><span class="text-yellow-400">LinkedIn:</span> <a href="https://www.linkedin.com/in/${profileData.linkedinUser}" target="_blank" class="text-cyan-400 hover:underline">linkedin.com/in/${profileData.linkedinUser}</a></li>
-        <li><span class="text-yellow-400">GitHub:</span> <a href="https://github.com/${profileData.githubUser}" target="_blank" class="text-cyan-400 hover:underline">github.com/${profileData.githubUser}</a></li>
-        <li><span class="text-yellow-400">Instagram:</span> <a href="https://www.instagram.com/${profileData.instagramUser}" target="_blank" class="text-cyan-400 hover:underline">instagram.com/${profileData.instagramUser}</a></li>
-      </ul>`,
-    
-    about: () => `
-      <div class="flex items-center space-x-4">
-        <img src="/images/profile.jpg" alt="Profile Picture" class="rounded-full border-2 border-[#7aa2f7] w-24 h-24 flex-shrink-0" onerror="this.src='/images/profile.jpg'">
-        <div class="flex flex-col justify-center">
-          <span class="text-green-400">About Me:</span>
-          <p class="mt-1">${profileData.about}</p>
-        </div>
-      </div>`,
-    
-    skills: () => `
-      <span class="text-green-400">Technical Skills:</span>
-      <ul class="list-inside mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
-        ${profileData.skills.map(sc => 
-          `<li><span class="text-yellow-400">${sc.category}:</span> ${sc.items.join(', ')}</li>`
-        ).join('')}
-      </ul>`,
-    
-    projects: () => `
-      <span class="text-green-400">Projects:</span>
-      <div class="mt-2 space-y-2">
-        ${profileData.projects.map(p => `
-          <div>
-            <h3 class="text-purple-400">${p.name}</h3>
-            <p class="text-sm">${p.description}</p>
-            <a href="${p.link}" target="_blank" class="text-cyan-400 hover:underline">${p.link.replace('https://', '')}</a>
-          </div>
-        `).join('')}
-      </div>`,
-    
+  social: () => '<span class="text-green-400">Connect with Me:</span><ul class="list-inside mt-2"><li><span class="text-yellow-400">LinkedIn:</span> <a href="https://www.linkedin.com/in/prasanth1010000" target="_blank" class="text-cyan-400 hover:underline">linkedin.com/in/prasanth1010000</a></li><li><span class="text-yellow-400">GitHub:</span> <a href="https://github.com/PrasanthPradeep" target="_blank" class="text-cyan-400 hover:underline">github.com/PrasanthPradeep</a></li><li><span class="text-yellow-400">Instagram:</span> <a href="https://www.instagram.com/prasanth__p_" target="_blank" class="text-cyan-400 hover:underline">instagram.com/prasanth__p_</a></li></ul>',
+  about: () => `<div class="flex items-center space-x-4"><img src="/images/profile.jpg" alt="Profile Picture" class="rounded-full border-2 border-[#7aa2f7] w-24 h-24 flex-shrink-0" onerror="this.src='/images/profile.jpg'"><div class="flex flex-col justify-center"><span class="text-green-400">About Me:</span><p class="mt-1">${profileData.about}</p></div></div>`,
+  skills: () => `<span class="text-green-400">Technical Skills:</span><ul class="list-inside mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">${profileData.skills.map(sc => `<li><span class="text-yellow-400">${sc.category}:</span> ${sc.items.join(', ')}</li>`).join('')}</ul>`,
+  projects: () => `<span class="text-green-400">Projects:</span><div class="mt-2 space-y-3">${profileData.projects.map(p => `
+    <div>
+      <h3 class="text-purple-400 font-semibold">${p.name}</h3>
+      <p class="text-sm mt-1">${p.description}</p>
+      <div class="flex gap-4 mt-1 items-center">
+        <a href="${p.link}" target="_blank" class="text-cyan-400 hover:underline text-sm flex items-center gap-1">
+          <img src="/images/link.svg" alt="Link" class="w-4 h-4 inline-block" />
+          Live Demo
+        </a>
+        <a href="${p.repo}" target="_blank" class="text-green-400 hover:underline text-sm flex items-center gap-1">
+          <img src="/images/github.svg" alt="Repository" class="w-4 h-4 inline-block" />
+          Repository
+        </a>
+      </div>
+    </div>
+  `).join('')}</div>`,
     history: () => commandHistory.map((cmd, index) => `${index + 1}: ${cmd}`).join('<br>'),
     
     neofetch: () => {

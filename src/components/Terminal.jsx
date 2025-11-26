@@ -469,9 +469,9 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
       <div 
         className={`w-full h-full shadow-2xl flex flex-col overflow-hidden ${terminalState === 'maximized' ? '' : 'rounded-lg'}`}
         style={{
-          background: 'rgba(36, 40, 59, 0.65)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
+          background: 'rgba(21, 22, 30, 0.2)',
+          backdropFilter: 'blur(7px)',
+          WebkitBackdropFilter: 'blur(7px)',
           border: '1px solid rgba(74, 79, 105, 0.4)'
         }}
       >

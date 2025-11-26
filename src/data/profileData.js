@@ -16,7 +16,8 @@ export const profileData = {
     {
       name: "PromptPilot",
       description: "An AI-powered tool to help users craft better prompts.",
-      link: "https://github.com/PrasanthPradeep/PromptPilot"
+      link: "https://github.com/Prismaibrowser/web",
+      repo: "https://github.com/Prismaibrowser/web"
     },
     {
       name: "Project Prism",
