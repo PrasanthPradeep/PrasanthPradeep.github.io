@@ -264,15 +264,26 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
       setHireMode('organization');
       appendOutput(`<div class="text-yellow-400">What is your organization's name?</div>`);
     } else if (hireMode === 'organization') {
+      setHireData(prev => ({ ...prev, organization: response }));
+      setHireMode('email');
+      appendOutput(`<div class="text-yellow-400">What is your email address?</div>`);
+    } else if (hireMode === 'email') {
+      const email = response.trim();
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        appendOutput(`<div class="text-red-400">Please enter a valid email address.</div>`);
+        return;
+      }
+
       const name = hireData.name;
-      const org = response;
+      const org = hireData.organization;
       appendOutput(`<div class="text-green-400">Thank you, ${name} from ${org}. I appreciate you taking the first step to hire me.</div>`);
       appendOutput(`<p>Initializing hiring sequence...</p><p>&gt;&gt; Congratulations, you just unlocked your best hire!</p>`);
       
       setTimeout(() => {
         const subject = encodeURIComponent("Hiring Inquiry from Your Interactive Portfolio");
-        const body = encodeURIComponent(`Hello Prasanth,\n\nMy name is ${name} from ${org}.\n\nI came across your impressive interactive terminal portfolio and was very impressed with your skills and projects.\n\nI would like to discuss a potential opportunity with you. Please let me know your availability for a brief chat.\n\nBest regards,`);
-        window.location.href = `mailto:${profileData.email}?subject=${subject}&body=${body}`;
+        const body = encodeURIComponent(`Hello Prasanth,\n\nMy name is ${name} from ${org}.\n\nYou can reach me at ${email}.\n\nI came across your impressive interactive terminal portfolio and was very impressed with your skills and projects.\n\nI would like to discuss a potential opportunity with you. Please let me know your availability for a brief chat.\n\nBest regards,`);
+        window.open(`mailto:${profileData.email}?subject=${subject}&body=${body}`, '_blank', 'noopener,noreferrer');
         setHireMode(false);
         setHireData({});
       }, 2000);
