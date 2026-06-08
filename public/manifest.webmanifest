@@ -1,0 +1,25 @@
+{
+  "name": "Prasanth Pradeep - Terminal Portfolio",
+  "short_name": "Prasanth P",
+  "description": "Interactive terminal portfolio of Prasanth Pradeep.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0C0D10",
+  "theme_color": "#1a1b26",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/images/profile.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/profile.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -3,11 +3,37 @@ export const profileData = {
   name: "Prasanth P",
   role: "CSE Student | Web & AI Enthusiast",
   email: "programmerprasanth@proton.me",
-  githubUser: "PrasanthPradeep",
-  linkedinUser: "prasanth1010000",
-  instagramUser: "prasanth__p_",
-  xUser: "prasanth__p_",
-  about: "I am a passionate and creative CSE student with a knack for building beautiful and functional web applications. I specialize in Web Development and AI, and I'm always eager to learn new things and take on challenging projects.",
+  username: "prasanth",
+  about: `I'm Prasanth, a Computer Science student and open-source developer passionate about building innovative software.
+          My interests lie in AI, Browser Technologies, Web Development, and Developer Tools. I enjoy transforming ideas into real products that improve how people interact with technology.
+          Currently, I'm building Prism Browser, an AI-powered browser that enables natural language and voice-driven web interactions.
+          When I'm not coding, you'll find me exploring new technologies, contributing to open source, and continuously expanding my skills as a developer.`,
+  socialProfiles: [
+    {
+      id: "linkedin",
+      label: "LinkedIn",
+      username: "prasanthptech",
+      url: "https://www.linkedin.com/in/prasanthptech"
+    },
+    {
+      id: "github",
+      label: "GitHub",
+      username: "PrasanthPradeep",
+      url: "https://github.com/PrasanthPradeep"
+    },
+    {
+      id: "x",
+      label: "X",
+      username: "prasanth__p_",
+      url: "https://x.com/prasanth__p_"
+    },
+    {
+      id: "instagram",
+      label: "Instagram",
+      username: "prasanth__p_",
+      url: "https://www.instagram.com/prasanth__p_"
+    }
+  ],
   skills: [
     { category: "Languages", items: ["Python", "C++", "JavaScript", "TypeScript"] },
     { category: "Web Dev", items: ["React", "Node.js", "HTML/CSS", "Tailwind CSS"] },
@@ -36,6 +62,12 @@ export const profileData = {
   location: "Kollam, Kerala, India",
   status: "Open to new opportunities"
 };
+
+export const getSocialProfile = (id) => (
+  profileData.socialProfiles.find((profile) => profile.id === id)
+);
+
+export const githubProfile = getSocialProfile("github");
 
 export const quotes = [
   { quote: "Talk is cheap. Show me the code.", author: "Linus Torvalds" },

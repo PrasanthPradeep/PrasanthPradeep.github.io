@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useTerminal } from '../hooks/useTerminal';
 import { profileData } from '../data/profileData';
 
-const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, externalCommand }) => {
+const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, externalCommand, zIndex = 2, onFocusWindow }) => {
   const terminalRef = useRef(null);
   const inputRef = useRef(null);
   const outputRef = useRef(null);
@@ -44,11 +44,11 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
 
   // Handle external commands from desktop icons
   useEffect(() => {
-    if (externalCommand && isVisible) {
-      processCommand(externalCommand);
+    if (externalCommand?.command && isVisible) {
+      processCommand(externalCommand.command);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [externalCommand, isVisible]);
+  }, [externalCommand?.id, isVisible]);
 
   const addWelcomeMessage = () => {
     setOutput([{
@@ -73,8 +73,8 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
 
   // Focus input when terminal becomes visible
   useEffect(() => {
-    if (isVisible && inputRef.current) {
-      inputRef.current.focus();
+    if (isVisible) {
+      requestAnimationFrame(() => inputRef.current?.focus());
     }
   }, [isVisible]);
 
@@ -129,7 +129,7 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
     if (!command.trim()) return;
 
     // Add command to history
-    setCommandHistory(prev => [command, ...prev]);
+    setCommandHistory(prev => [command, ...prev].slice(0, 50));
     setHistoryIndex(-1);
 
     const [cmd, ...args] = command.trim().split(' ').filter(Boolean);
@@ -409,7 +409,7 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
         height: '100%',
         maxWidth: '100%',
         transform: 'none',
-        zIndex: 9999,
+        zIndex,
         borderRadius: 0
       };
 
@@ -419,7 +419,7 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
         left: `${position.x}px`,
         top: `${position.y}px`,
         transform: 'none',
-        zIndex: 2
+        zIndex
       };
     } else {
       return {
@@ -427,7 +427,7 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        zIndex: 2
+        zIndex
       };
     }
   };
@@ -460,7 +460,8 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
     <div
       ref={terminalRef}
       id="terminal-container"
-      className={`w-full ${terminalState === 'maximized' ? 'maximized' : 'max-w-4xl'}`}
+      className={`terminal-container w-full ${terminalState === 'maximized' ? 'maximized' : 'max-w-4xl'}`}
+      onMouseDown={onFocusWindow}
       style={{
         ...getContainerStyle(),
         height: terminalState === 'maximized' ? '100%' : 'calc(80vh - 40px)'
@@ -477,7 +478,7 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
       >
         {/* Terminal Header */}
         <div
-          className="flex items-center p-2 border-b cursor-move"
+          className="terminal-header flex items-center p-2 border-b cursor-move"
           style={{
             background: 'rgba(30, 30, 46, 0.5)',
             borderColor: 'rgba(74, 79, 105, 0.4)'
@@ -501,7 +502,7 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
               onClick={handleMinimize}
             />
           </div>
-          <div className="flex-grow text-center text-sm text-gray-400">
+          <div className="min-w-0 flex-grow truncate px-2 text-center text-sm text-gray-400">
             prasanth@portfolio: ~
           </div>
           {hasOutput && (
@@ -518,7 +519,7 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
         {/* Terminal Output */}
         <div
           ref={outputRef}
-          className="flex-grow p-4 overflow-y-auto text-sm text-[#a9b1d6]"
+          className="terminal-output flex-grow overflow-y-auto p-4 text-base leading-relaxed text-[#a9b1d6]"
           style={{
             display: 'block'
           }}
@@ -531,32 +532,32 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
 
         {/* Terminal Input */}
         <div
-          className="p-2 border-t"
+          className="terminal-input border-t p-2"
           style={{
             background: 'rgba(30, 30, 46, 0.5)',
             borderColor: 'rgba(74, 79, 105, 0.4)'
           }}
         >
-          <div className="flex items-center">
-            <span className="flex items-center">
+          <div className="terminal-input-row flex items-center">
+            <span className="terminal-prompt flex items-center whitespace-nowrap">
               {getPromptPrefix()}
             </span>
             <div className="relative flex-grow">
               <span
                 ref={mirrorRef}
                 className="absolute top-0 left-0 invisible whitespace-pre"
-                style={{ fontSize: '1em', padding: 0, margin: 0, border: 0, lineHeight: '1.2em' }}
+                style={{ fontSize: '1.05rem', padding: 0, margin: 0, border: 0, lineHeight: '1.4em' }}
               />
               <input
                 ref={inputRef}
                 type="text"
                 className="w-full bg-transparent border-none outline-none text-[#a9b1d6]"
                 style={{ 
-                  fontSize: '1em', 
+                  fontSize: '1.05rem', 
                   padding: 0, 
                   margin: 0, 
                   border: 0, 
-                  lineHeight: '1.2em',
+                  lineHeight: '1.4em',
                   caretColor: 'transparent'
                 }}
                 value={inputValue}
@@ -567,7 +568,7 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
               />
               <div
                 ref={cursorRef}
-                className="absolute top-0 left-0 inline-block w-2.5 h-5 bg-[#a9b1d6] animate-pulse"
+                className="absolute top-0 left-0 inline-block w-3 h-6 bg-[#a9b1d6] animate-pulse"
                 style={{ 
                   verticalAlign: 'bottom',
                   animation: 'pulse 1s step-end infinite'

@@ -2,15 +2,42 @@ import React, { useState, useCallback } from 'react';
 import {
   ParticleBackground,
   DesktopIcons,
+  GithubWindow,
   Terminal,
+  ProjectsWindow,
+  SocialsWindow,
   Taskbar,
   FullscreenToggle
 } from '../components';
 
+const createCommandEvent = (command) => ({
+  command,
+  id: `${command}-${Date.now()}-${Math.random().toString(36).slice(2)}`
+});
+
 const Home = () => {
   const [terminalVisible, setTerminalVisible] = useState(true);
   const [terminalState, setTerminalState] = useState('default'); // 'default', 'minimized', 'maximized'
+  const [projectsVisible, setProjectsVisible] = useState(false);
+  const [socialsVisible, setSocialsVisible] = useState(false);
+  const [githubVisible, setGithubVisible] = useState(false);
   const [externalCommand, setExternalCommand] = useState(null);
+  const [windowLayers, setWindowLayers] = useState({
+    terminal: 20,
+    projects: 21,
+    socials: 22,
+    github: 23
+  });
+
+  const bringWindowToFront = useCallback((windowId) => {
+    setWindowLayers((layers) => {
+      const nextLayer = Math.max(...Object.values(layers)) + 1;
+      return {
+        ...layers,
+        [windowId]: nextLayer
+      };
+    });
+  }, []);
 
   const handleCommandClick = useCallback((command) => {
     // For terminal command, toggle visibility with animation
@@ -22,7 +49,26 @@ const Home = () => {
         // Opening terminal - always reset to default state with fly-back animation
         setTerminalState('default');
         setTerminalVisible(true);
+        bringWindowToFront('terminal');
       }
+      return;
+    }
+
+    if (command === 'social') {
+      setSocialsVisible(true);
+      bringWindowToFront('socials');
+      return;
+    }
+
+    if (command === 'projects') {
+      setProjectsVisible(true);
+      bringWindowToFront('projects');
+      return;
+    }
+
+    if (command === 'github') {
+      setGithubVisible(true);
+      bringWindowToFront('github');
       return;
     }
 
@@ -31,23 +77,21 @@ const Home = () => {
       setTerminalState('default'); // Reset to default when opening
       setTerminalVisible(true);
     }
-    
-    // Send command to terminal with timestamp to ensure it triggers even for same command
-    setExternalCommand(`${command}_${Date.now()}`);
-    
-    // Reset after a short delay to allow re-triggering
-    setTimeout(() => setExternalCommand(null), 100);
-  }, [terminalVisible]);
+    bringWindowToFront('terminal');
+
+    setExternalCommand(createCommandEvent(command));
+  }, [bringWindowToFront, terminalVisible]);
 
   const handleTerminalToggle = useCallback(() => {
     setTerminalVisible(prev => {
       if (!prev) {
         // Opening terminal - reset to default state
         setTerminalState('default');
+        bringWindowToFront('terminal');
       }
       return !prev;
     });
-  }, []);
+  }, [bringWindowToFront]);
 
   return (
     <div className="text-[#a9b1d6] min-h-screen p-4 overflow-hidden">
@@ -60,8 +104,34 @@ const Home = () => {
         onToggle={handleTerminalToggle}
         terminalState={terminalState}
         setTerminalState={setTerminalState}
-        externalCommand={externalCommand ? externalCommand.split('_')[0] : null}
+        externalCommand={externalCommand}
+        zIndex={terminalState === 'maximized' ? 9999 : windowLayers.terminal}
+        onFocusWindow={() => bringWindowToFront('terminal')}
       />
+      {terminalState !== 'maximized' && (
+        <GithubWindow
+          isVisible={githubVisible}
+          onClose={() => setGithubVisible(false)}
+          onFocusWindow={() => bringWindowToFront('github')}
+          zIndex={windowLayers.github}
+        />
+      )}
+      {terminalState !== 'maximized' && (
+        <ProjectsWindow
+          isVisible={projectsVisible}
+          onClose={() => setProjectsVisible(false)}
+          onFocusWindow={() => bringWindowToFront('projects')}
+          zIndex={windowLayers.projects}
+        />
+      )}
+      {terminalState !== 'maximized' && (
+        <SocialsWindow
+          isVisible={socialsVisible}
+          onClose={() => setSocialsVisible(false)}
+          onFocusWindow={() => bringWindowToFront('socials')}
+          zIndex={windowLayers.socials}
+        />
+      )}
       {terminalState !== 'maximized' && (
         <>
           <Taskbar 

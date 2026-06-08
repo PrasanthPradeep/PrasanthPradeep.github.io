@@ -1,10 +1,10 @@
 import { useState, useCallback } from 'react';
-import { profileData, quotes } from '../data/profileData';
-import { createFileSystem } from '../data/filesystem';
+import { githubProfile, profileData, quotes } from '../data/profileData';
+import { createFileSystem, HOME_PATH } from '../data/filesystem';
 
 export const useTerminal = () => {
   const [commandHistory, setCommandHistory] = useState([]);
-  const [currentPath, setCurrentPath] = useState('/home/prasanth');
+  const [currentPath, setCurrentPath] = useState(HOME_PATH);
   const [filesystem] = useState(createFileSystem());
   const [aiChatMode, setAiChatMode] = useState(false);
   const [interviewMode, setInterviewMode] = useState(false);
@@ -31,8 +31,8 @@ export const useTerminal = () => {
   }, [currentPath]);
 
   const getDisplayPath = useCallback(() => {
-    return currentPath.startsWith('/home/prasanth') 
-      ? '~' + currentPath.substring('/home/prasanth'.length) 
+    return currentPath.startsWith(HOME_PATH)
+      ? '~' + currentPath.substring(HOME_PATH.length)
       : currentPath;
   }, [currentPath]);
 
@@ -55,22 +55,23 @@ export const useTerminal = () => {
         <li><span class="text-blue-400">clear</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Clears the terminal screen.</li>
         <li><span class="text-blue-400">history</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Shows command history.</li>
       </ul>`,
-  social: () => '<span class="text-green-400">Connect with Me:</span><ul class="list-inside mt-2"><li><span class="text-yellow-400">LinkedIn:</span> <a href="https://www.linkedin.com/in/prasanth1010000" target="_blank" class="text-cyan-400 hover:underline">linkedin.com/in/prasanth1010000</a></li><li><span class="text-yellow-400">GitHub:</span> <a href="https://github.com/PrasanthPradeep" target="_blank" class="text-cyan-400 hover:underline">github.com/PrasanthPradeep</a></li><li><span class="text-yellow-400">Twitter:</span> <a href="https://x.com/prasanth__p_" target="_blank" class="text-cyan-400 hover:underline">x.com/prasanth__p_</a></li><li><span class="text-yellow-400">Instagram:</span> <a href="https://www.instagram.com/prasanth__p_" target="_blank" class="text-cyan-400 hover:underline">instagram.com/prasanth__p_</a></li></ul>',
-  about: () => `<div class="flex items-center space-x-4"><img src="/images/profile.jpg" alt="Profile Picture" class="rounded-full border-2 border-[#7aa2f7] w-24 h-24 flex-shrink-0" onerror="this.src='/images/profile.jpg'"><div class="flex flex-col justify-center"><span class="text-green-400">About Me:</span><p class="mt-1">${profileData.about}</p></div></div>`,
+  social: () => `<span class="text-green-400">Connect with Me:</span><ul class="list-inside mt-2">${profileData.socialProfiles.map(profile => `<li><span class="text-yellow-400">${profile.label}:</span> <a href="${profile.url}" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:underline">${profile.url.replace(/^https?:\/\//, '')}</a></li>`).join('')}</ul>`,
+  // about: () => `<div class="flex items-center space-x-4"><img src="/images/profile.jpg" alt="Profile Picture" class="rounded-full border-2 border-[#7aa2f7] w-24 h-24 flex-shrink-0" onerror="this.src='/images/profile.jpg'"><div class="flex flex-col justify-center"><span class="text-green-400">About Me:</span><p class="mt-1">${profileData.about}</p></div></div>`,
+  about: () => `<div class="flex items-center space-x-4"><div class="flex flex-col justify-center"><span class="text-green-400">About Me:</span><p class="mt-1">${profileData.about}</p></div></div>`,
   skills: () => `<span class="text-green-400">Technical Skills:</span><ul class="list-inside mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">${profileData.skills.map(sc => `<li><span class="text-yellow-400">${sc.category}:</span> ${sc.items.join(', ')}</li>`).join('')}</ul>`,
   projects: () => `<span class="text-green-400">Projects:</span><div class="mt-2 space-y-3">${profileData.projects.map(p => `
     <div>
       <h3 class="text-purple-400 font-semibold">${p.name}</h3>
       <p class="text-sm mt-1">${p.description}</p>
       <div class="flex gap-4 mt-1 items-center">
-        <a href="${p.link}" target="_blank" class="text-cyan-400 hover:underline text-sm flex items-center gap-1">
+        <a href="${p.link}" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:underline text-sm flex items-center gap-1">
           <img src="/images/link.svg" alt="Link" class="w-4 h-4 inline-block" />
           Live Demo
         </a>
-        <a href="${p.repo}" target="_blank" class="text-green-400 hover:underline text-sm flex items-center gap-1">
+        ${p.repo ? `<a href="${p.repo}" target="_blank" rel="noopener noreferrer" class="text-green-400 hover:underline text-sm flex items-center gap-1">
           <img src="/images/github.svg" alt="Repository" class="w-4 h-4 inline-block" />
           Repository
-        </a>
+        </a>` : ''}
       </div>
     </div>
   `).join('')}</div>`,
@@ -92,7 +93,7 @@ export const useTerminal = () => {
           <div>
             <p><span class="text-cyan-400">Name</span>: ${profileData.name}</p>
             <p><span class="text-cyan-400">Role</span>: ${profileData.role}</p>
-            <p><span class="text-cyan-400">GitHub</span>: github.com/${profileData.githubUser}</p>
+            <p><span class="text-cyan-400">GitHub</span>: ${githubProfile?.url.replace(/^https?:\/\//, '') || 'Not available'}</p>
             <p><span class="text-cyan-400">Contact</span>: ${profileData.email}</p>
             <p><span class="text-cyan-400">Location</span>: ${profileData.location}</p>
             <p><span class="text-cyan-400">Status</span>: ${profileData.status}</p>
@@ -121,7 +122,7 @@ export const useTerminal = () => {
   }, [currentPath, filesystem, resolvePath]);
 
   const cd = useCallback((args) => {
-    const targetPath = args[0] || '/home/prasanth';
+    const targetPath = args[0] || HOME_PATH;
     const newPath = resolvePath(targetPath);
     
     if (filesystem[newPath] && filesystem[newPath].type === 'dir') {

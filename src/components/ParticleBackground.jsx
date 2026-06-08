@@ -9,8 +9,15 @@ const ParticleBackground = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
     const ctx = canvas.getContext('2d');
     let animationFrameId;
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
 
     class Particle {
       constructor(x, y, directionX, directionY, size, color) {
@@ -30,10 +37,10 @@ const ParticleBackground = () => {
       }
 
       update() {
-        if (this.x > canvas.width || this.x < 0) {
+        if (this.x > width || this.x < 0) {
           this.directionX = -this.directionX;
         }
-        if (this.y > canvas.height || this.y < 0) {
+        if (this.y > height || this.y < 0) {
           this.directionY = -this.directionY;
         }
 
@@ -42,13 +49,13 @@ const ParticleBackground = () => {
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < mouseRef.current.radius + this.size) {
-          if (mouseRef.current.x < this.x && this.x < canvas.width - this.size * 10) {
+          if (mouseRef.current.x < this.x && this.x < width - this.size * 10) {
             this.x += 5;
           }
           if (mouseRef.current.x > this.x && this.x > this.size * 10) {
             this.x -= 5;
           }
-          if (mouseRef.current.y < this.y && this.y < canvas.height - this.size * 10) {
+          if (mouseRef.current.y < this.y && this.y < height - this.size * 10) {
             this.y += 5;
           }
           if (mouseRef.current.y > this.y && this.y > this.size * 10) {
@@ -63,20 +70,25 @@ const ParticleBackground = () => {
     }
 
     const init = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      mouseRef.current.radius = (canvas.height / 150) * (canvas.width / 150);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = Math.floor(width * pixelRatio);
+      canvas.height = Math.floor(height * pixelRatio);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+      mouseRef.current.radius = (height / 150) * (width / 150);
       particlesArrayRef.current = [];
 
       // Reduce particles on smaller screens or lower-end devices for better performance
-      const baseParticles = (canvas.height * canvas.width) / 9000;
-      const isMobile = window.innerWidth < 768;
+      const baseParticles = (height * width) / 12000;
+      const isMobile = width < 768;
       const numberOfParticles = isMobile ? Math.min(baseParticles, 50) : Math.min(baseParticles, 100);
       
       for (let i = 0; i < numberOfParticles; i++) {
         const size = Math.random() * 2 + 1;
-        const x = Math.random() * (canvas.width - size * 2) + size * 2;
-        const y = Math.random() * (canvas.height - size * 2) + size * 2;
+        const x = Math.random() * (width - size * 2) + size * 2;
+        const y = Math.random() * (height - size * 2) + size * 2;
         const directionX = Math.random() * 0.5 - 0.25;
         const directionY = Math.random() * 0.5 - 0.25;
         const color = '#a9b1d6';
@@ -95,7 +107,7 @@ const ParticleBackground = () => {
             (particles[a].x - particles[b].x) * (particles[a].x - particles[b].x) +
             (particles[a].y - particles[b].y) * (particles[a].y - particles[b].y);
 
-          if (distance < (canvas.width / 7) * (canvas.height / 7)) {
+          if (distance < (width / 7) * (height / 7)) {
             opacityValue = 1 - distance / 20000;
             ctx.strokeStyle = `rgba(146, 155, 204, ${opacityValue})`;
             ctx.lineWidth = 1;
@@ -109,7 +121,7 @@ const ParticleBackground = () => {
     };
 
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, width, height);
       
       for (let i = 0; i < particlesArrayRef.current.length; i++) {
         particlesArrayRef.current[i].update();
