@@ -191,12 +191,12 @@ body {
 
   .terminal-container {
     position: fixed !important;
-    top: 96px !important;
+    top: 100px !important;
     left: 8px !important;
     right: 8px !important;
     width: auto !important;
     max-width: none !important;
-    height: calc(100dvh - 132px) !important;
+    height: calc(100dvh - 152px) !important;
     transform: none !important;
   }
 
