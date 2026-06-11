@@ -60,6 +60,16 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [isFirstDrag, setIsFirstDrag] = useState(true);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const {
     commands,
@@ -360,6 +370,18 @@ Start by welcoming the candidate and asking them what role they are interviewing
         ? commands[lowerCmd]()
         : commands[lowerCmd];
       appendOutput(result);
+      if (['game', 'projects', 'socials', 'github'].includes(lowerCmd) && onCommand) {
+        onCommand(lowerCmd);
+      }
+      return;
+    }
+
+    // Support github command even if not in commands object
+    if (lowerCmd === 'github') {
+      appendOutput('<div class="text-green-400">Opening GitHub window</div>');
+      if (onCommand) {
+        onCommand('github');
+      }
       return;
     }
 
@@ -391,7 +413,7 @@ Start by welcoming the candidate and asking them what role they are interviewing
       </div>
     `);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [commands, ls, cd, cat, getDisplayPath, appendOutput, setCommandHistory, onToggle]);
+  }, [commands, ls, cd, cat, getDisplayPath, appendOutput, setCommandHistory, onToggle, onCommand]);
 
   // Make the welcome 'help' link clickable: run `help` when clicked
   useEffect(() => {
@@ -574,7 +596,7 @@ Start by welcoming the candidate and asking them what role they are interviewing
 
   // Dragging logic
   const handleMouseDown = (e) => {
-    if (terminalState === 'maximized' || terminalState === 'minimized') return;
+    if (isMobile || terminalState === 'maximized' || terminalState === 'minimized') return;
 
     if (isFirstDrag && terminalRef.current) {
       const rect = terminalRef.current.getBoundingClientRect();
@@ -614,6 +636,16 @@ Start by welcoming the candidate and asking them what role they are interviewing
   }, [isDragging, handleMouseMove, handleMouseUp]);
 
   const getContainerStyle = () => {
+    if (isMobile) {
+      return {
+        position: 'fixed',
+        top: '120px',
+        left: '8px',
+        width: 'calc(100vw - 16px)',
+        transform: 'none',
+        zIndex
+      };
+    }
     if (terminalState === 'maximized') {
       return {
         position: 'fixed',
@@ -680,11 +712,11 @@ Start by welcoming the candidate and asking them what role they are interviewing
       onMouseDown={onFocusWindow}
       style={{
         ...getContainerStyle(),
-        height: terminalState === 'maximized' ? '100%' : 'calc(80vh - 40px)'
+        height: isMobile ? 'calc(100vh - 120px - 48px)' : (terminalState === 'maximized' ? '100%' : 'calc(80vh - 40px)')
       }}
     >
       <div
-        className={`w-full h-full shadow-2xl flex flex-col overflow-hidden ${terminalState === 'maximized' ? '' : 'rounded-lg'}`}
+        className={`w-full h-full shadow-2xl flex flex-col overflow-hidden ${(terminalState === 'maximized' && !isMobile) ? '' : 'rounded-lg'}`}
         style={{
           background: 'rgba(21, 22, 30, 0.2)',
           backdropFilter: 'blur(7px)',
@@ -711,6 +743,7 @@ Start by welcoming the candidate and asking them what role they are interviewing
               className="w-3 h-3 rounded-full bg-yellow-500 cursor-pointer"
               title="Maximize/Restore"
               onClick={handleMaximize}
+              style={{ display: isMobile ? 'none' : 'block' }}
             />
             <div
               className="w-3 h-3 rounded-full bg-green-500 cursor-pointer"

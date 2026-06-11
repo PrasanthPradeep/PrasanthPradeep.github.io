@@ -43,9 +43,12 @@ body {
 
 /* Cursor animation */
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0;
   }
@@ -57,6 +60,7 @@ body {
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.9);
   }
+
   100% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
@@ -96,14 +100,16 @@ body {
 
 /* Glassmorphism styles for a modern, blurred background effect */
 .glass-effect {
-  background: rgba(21, 22, 30, 0.75); /* #15161E with 75% opacity */
+  background: rgba(21, 22, 30, 0.75);
+  /* #15161E with 75% opacity */
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(74, 79, 105, 0.3);
 }
 
 .glass-header-footer {
-  background: rgba(21, 22, 30, 0.85); /* #15161E with 85% opacity - slightly more opaque for header */
+  background: rgba(21, 22, 30, 0.85);
+  /* #15161E with 85% opacity - slightly more opaque for header */
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
@@ -185,7 +191,7 @@ body {
 
   .terminal-container {
     position: fixed !important;
-    top: 76px !important;
+    top: 96px !important;
     left: 8px !important;
     right: 8px !important;
     width: auto !important;
@@ -303,6 +309,7 @@ body {
 }
 
 @media (max-width: 420px) {
+
   .terminal-container,
   .browser-window {
     top: 70px !important;

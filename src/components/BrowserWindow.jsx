@@ -18,9 +18,19 @@ const BrowserWindow = ({
   const [isMaximized, setIsMaximized] = useState(false);
   const [position, setPosition] = useState(initialPosition);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleMouseDown = (event) => {
-    if (isMaximized || !windowRef.current) return;
+    if (isMobile || isMaximized || !windowRef.current) return;
 
     const rect = windowRef.current.getBoundingClientRect();
     setDragOffset({
@@ -83,14 +93,14 @@ const BrowserWindow = ({
       }`}
       onMouseDownCapture={onFocusWindow}
       style={{
-        top: isMaximized ? 0 : `${position.y}px`,
-        left: isMaximized ? 0 : `${position.x}px`,
-        width: isMaximized ? '100%' : 'min(1040px, calc(100vw - 32px))',
-        height: isMaximized ? '100%' : 'min(720px, calc(100vh - 88px))',
+        top: isMobile ? '120px' : (isMaximized ? 0 : `${position.y}px`),
+        left: isMobile ? '8px' : (isMaximized ? 0 : `${position.x}px`),
+        width: isMobile ? 'calc(100vw - 16px)' : (isMaximized ? '100%' : 'min(1040px, calc(100vw - 32px))'),
+        height: isMobile ? 'calc(100vh - 120px - 48px)' : (isMaximized ? '100%' : 'min(720px, calc(100vh - 88px))'),
         background: 'rgba(21, 22, 30, 0.88)',
         backdropFilter: 'blur(10px)',
         WebkitBackdropFilter: 'blur(10px)',
-        border: isMaximized ? 0 : '1px solid rgba(74, 79, 105, 0.45)',
+        border: (isMaximized && !isMobile) ? 0 : '1px solid rgba(74, 79, 105, 0.45)',
         zIndex
       }}
       aria-label={ariaLabel}
@@ -111,6 +121,7 @@ const BrowserWindow = ({
             onClick={() => setIsMaximized((value) => !value)}
             title={isMaximized ? `Restore ${title}` : `Maximize ${title}`}
             aria-label={isMaximized ? `Restore ${title}` : `Maximize ${title}`}
+            style={{ display: isMobile ? 'none' : 'block' }}
           />
           <button
             className="h-3 w-3 rounded-full bg-green-500"

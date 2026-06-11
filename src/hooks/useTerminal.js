@@ -45,6 +45,7 @@ export const useTerminal = () => {
         <li><span class="text-blue-400">socials</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Shows my social media links.</li>
         <li><span class="text-blue-400">skills</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Lists my technical skills.</li>
         <li><span class="text-blue-400">projects</span> &nbsp;&nbsp;&nbsp;&nbsp;- Shows my recent projects.</li>
+        <li><span class="text-blue-400">github</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Opens the GitHub window.</li>
         <li><span class="text-blue-400">game</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Opens the RetroSnake game window.</li>
         <li><span class="text-blue-400">neofetch</span> &nbsp;&nbsp;&nbsp;&nbsp;- Display system information.</li>
         <li><span class="text-blue-400">ls [path]</span> &nbsp;&nbsp;&nbsp;- List directory contents.</li>
@@ -76,6 +77,7 @@ export const useTerminal = () => {
       </div>
     </div>
   `).join('')}</div>`,
+  github: () => `<div class="text-green-400">Opening GitHub window</div>`,
   game: () => `<div class="text-green-400">Opening game window</div>`,
     history: () => commandHistory.map((cmd, index) => `${index + 1}: ${cmd}`).join('<br>'),
     
