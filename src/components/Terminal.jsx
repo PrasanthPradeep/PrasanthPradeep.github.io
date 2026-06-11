@@ -11,11 +11,12 @@ const escapeTerminalHtml = (value) => (
 );
 
 const getAiErrorMessage = (error, context) => {
-  if (error.message === 'Missing NVIDIA_API_KEY') {
+  const message = error?.message || (typeof error === 'string' ? error : JSON.stringify(error));
+  if (message === 'Missing NVIDIA_API_KEY') {
     return `Error: ${context} could not start because NVIDIA_API_KEY is not configured on the server.`;
   }
 
-  return `Error: ${context} request failed (${error.message}).`;
+  return `Error: ${context} request failed (${message}).`;
 };
 
 const getLocalAiResponse = (message) => {
