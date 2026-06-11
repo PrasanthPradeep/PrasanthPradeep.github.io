@@ -41,21 +41,22 @@ export const useTerminal = () => {
     help: `
       <span class="text-green-400">Available Commands:</span>
       <ul class="list-inside list-disc ml-4">
-        <li><span class="text-blue-400">about</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Displays my professional summary.</li>
-        <li><span class="text-blue-400">social</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Shows my social media links.</li>
+        <li><span class="text-blue-400">about</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Displays my professional summary.</li>
+        <li><span class="text-blue-400">socials</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Shows my social media links.</li>
         <li><span class="text-blue-400">skills</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Lists my technical skills.</li>
         <li><span class="text-blue-400">projects</span> &nbsp;&nbsp;&nbsp;&nbsp;- Shows my recent projects.</li>
-        <li><span class="text-blue-400">neofetch</span> &nbsp;&nbsp;&nbsp;&nbsp;- ✨ Display system information.</li>
+        <li><span class="text-blue-400">game</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Opens the RetroSnake game window.</li>
+        <li><span class="text-blue-400">neofetch</span> &nbsp;&nbsp;&nbsp;&nbsp;- Display system information.</li>
         <li><span class="text-blue-400">ls [path]</span> &nbsp;&nbsp;&nbsp;- List directory contents.</li>
         <li><span class="text-blue-400">cd [dir]</span> &nbsp;&nbsp;&nbsp;&nbsp;- Change directory.</li>
-        <li><span class="text-blue-400">cat [file]</span> &nbsp;&nbsp;&nbsp;- Display file content.</li>
-        <li><span class="text-blue-400">ai</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ✨ Start an interactive chat session with the AI.</li>
-        <li><span class="text-blue-400">ai interview</span> - ✨ Start a mock interview with the AI.</li>
-        <li><span class="text-blue-400">sudo hire</span> &nbsp;&nbsp;&nbsp;- ✨ Hire me!</li>
+        <li><span class="text-blue-400">cat [file]</span> &nbsp;&nbsp;- Display file content.</li>
+        <li><span class="text-blue-400">ai</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Start an interactive chat session with the AI.</li>
+        <li><span class="text-blue-400">ai interview</span> - Start a mock interview with the AI.</li>
+        <li><span class="text-blue-400">sudo hire</span> &nbsp;&nbsp;&nbsp;- Hire me!</li>
         <li><span class="text-blue-400">clear</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Clears the terminal screen.</li>
         <li><span class="text-blue-400">history</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Shows command history.</li>
       </ul>`,
-  social: () => `<span class="text-green-400">Connect with Me:</span><ul class="list-inside mt-2">${profileData.socialProfiles.map(profile => `<li><span class="text-yellow-400">${profile.label}:</span> <a href="${profile.url}" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:underline">${profile.url.replace(/^https?:\/\//, '')}</a></li>`).join('')}</ul>`,
+  socials: () => `<span class="text-green-400">Connect with Me:</span><ul class="list-inside mt-2">${profileData.socialProfiles.map(profile => `<li><span class="text-yellow-400">${profile.label}:</span> <a href="${profile.url}" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:underline">${profile.url.replace(/^https?:\/\//, '')}</a></li>`).join('')}</ul>`,
   // about: () => `<div class="flex items-center space-x-4"><img src="/images/profile.jpg" alt="Profile Picture" class="rounded-full border-2 border-[#7aa2f7] w-24 h-24 flex-shrink-0" onerror="this.src='/images/profile.jpg'"><div class="flex flex-col justify-center"><span class="text-green-400">About Me:</span><p class="mt-1">${profileData.about}</p></div></div>`,
   about: () => `<div class="flex items-center space-x-4"><div class="flex flex-col justify-center"><span class="text-green-400">About Me:</span><p class="mt-1">${profileData.about}</p></div></div>`,
   skills: () => `<span class="text-green-400">Technical Skills:</span><ul class="list-inside mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">${profileData.skills.map(sc => `<li><span class="text-yellow-400">${sc.category}:</span> ${sc.items.join(', ')}</li>`).join('')}</ul>`,
@@ -75,6 +76,7 @@ export const useTerminal = () => {
       </div>
     </div>
   `).join('')}</div>`,
+  game: () => `<div class="text-green-400">Opening game window</div>`,
     history: () => commandHistory.map((cmd, index) => `${index + 1}: ${cmd}`).join('<br>'),
     
     neofetch: () => {

@@ -17,13 +17,13 @@ export const createFileSystem = () => {
   const filesystem = {
     '/': { type: 'dir', children: ['home'] },
     '/home': { type: 'dir', children: [profileData.username] },
-    [HOME_PATH]: { type: 'dir', children: ['about.txt', 'skills.txt', 'social.txt', 'projects'] },
+    [HOME_PATH]: { type: 'dir', children: ['about.txt', 'skills.txt', 'socials.txt', 'projects'] },
     [`${HOME_PATH}/about.txt`]: { type: 'file', content: profileData.about },
     [`${HOME_PATH}/skills.txt`]: {
       type: 'file', 
       content: profileData.skills.map(s => `${s.category}:\n  - ${s.items.join('\n  - ')}`).join('\n\n') 
     },
-    [`${HOME_PATH}/social.txt`]: {
+    [`${HOME_PATH}/socials.txt`]: {
       type: 'file',
       content: profileData.socialProfiles.map(profile => `${profile.label}: ${profile.url}`).join('\n')
     },

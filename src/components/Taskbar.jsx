@@ -39,7 +39,7 @@ const iconMap = {
 const startMenuItems = [
   { id: 'terminal', label: 'Terminal', command: 'terminal', description: 'Open command shell' },
   { id: 'projects', label: 'Projects', command: 'projects', description: 'Browse project site' },
-  { id: 'social', label: 'Socials', command: 'social', description: 'Open connect hub' },
+  { id: 'social', label: 'Socials', command: 'socials', description: 'Open connect hub' },
   { id: 'github', label: 'GitHub', command: 'github', description: 'Open profile window' },
   { id: 'about', label: 'About', command: 'about', description: 'Show terminal bio' },
   { id: 'skills', label: 'Skills', command: 'skills', description: 'Show skill list' }
@@ -119,11 +119,11 @@ const Taskbar = ({ onCommandClick, terminalActive }) => {
     },
     {
       id: 'social',
-      title: 'Social',
+      title: 'Socials',
       svg: (
         iconMap.social
       ),
-      command: 'social'
+      command: 'socials'
     },
     {
       id: 'projects',

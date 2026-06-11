@@ -5,5 +5,6 @@ export { default as BrowserWindow } from './BrowserWindow';
 export { default as GithubWindow } from './GithubWindow';
 export { default as ProjectsWindow } from './ProjectsWindow';
 export { default as SocialsWindow } from './SocialsWindow';
+export { default as GameWindow } from './GameWindow';
 export { default as Taskbar } from './Taskbar';
 export { default as FullscreenToggle } from './FullscreenToggle';

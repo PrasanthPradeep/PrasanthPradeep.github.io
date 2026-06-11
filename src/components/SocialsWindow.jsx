@@ -1,7 +1,7 @@
 import React from 'react';
 import BrowserWindow from './BrowserWindow';
 
-const SOCIALS_URL = 'https://connect.prasanthp.me';
+const SOCIALS_URL = 'https://connect.prasanthp.tech';
 
 const SocialsWindow = ({ isVisible, onClose, onFocusWindow, zIndex }) => (
   <BrowserWindow

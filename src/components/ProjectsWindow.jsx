@@ -1,7 +1,7 @@
 import React from 'react';
 import BrowserWindow from './BrowserWindow';
 
-const PROJECTS_URL = 'https://projects.prasanthp.me';
+const PROJECTS_URL = 'https://projects.prasanthp.tech';
 
 const ProjectsWindow = ({ isVisible, onClose, onFocusWindow, zIndex }) => {
   return (

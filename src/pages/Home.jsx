@@ -6,6 +6,7 @@ import {
   Terminal,
   ProjectsWindow,
   SocialsWindow,
+  GameWindow,
   Taskbar,
   FullscreenToggle
 } from '../components';
@@ -21,12 +22,14 @@ const Home = () => {
   const [projectsVisible, setProjectsVisible] = useState(false);
   const [socialsVisible, setSocialsVisible] = useState(false);
   const [githubVisible, setGithubVisible] = useState(false);
+  const [gameVisible, setGameVisible] = useState(false);
   const [externalCommand, setExternalCommand] = useState(null);
   const [windowLayers, setWindowLayers] = useState({
     terminal: 20,
     projects: 21,
     socials: 22,
-    github: 23
+    game: 23,
+    github: 24
   });
 
   const bringWindowToFront = useCallback((windowId) => {
@@ -54,7 +57,7 @@ const Home = () => {
       return;
     }
 
-    if (command === 'social') {
+    if (command === 'socials') {
       setSocialsVisible(true);
       bringWindowToFront('socials');
       return;
@@ -69,6 +72,12 @@ const Home = () => {
     if (command === 'github') {
       setGithubVisible(true);
       bringWindowToFront('github');
+      return;
+    }
+
+    if (command === 'game') {
+      setGameVisible(true);
+      bringWindowToFront('game');
       return;
     }
 
@@ -107,6 +116,7 @@ const Home = () => {
         externalCommand={externalCommand}
         zIndex={terminalState === 'maximized' ? 9999 : windowLayers.terminal}
         onFocusWindow={() => bringWindowToFront('terminal')}
+        onCommand={handleCommandClick}
       />
       {terminalState !== 'maximized' && (
         <GithubWindow
@@ -122,6 +132,14 @@ const Home = () => {
           onClose={() => setProjectsVisible(false)}
           onFocusWindow={() => bringWindowToFront('projects')}
           zIndex={windowLayers.projects}
+        />
+      )}
+      {terminalState !== 'maximized' && (
+        <GameWindow
+          isVisible={gameVisible}
+          onClose={() => setGameVisible(false)}
+          onFocusWindow={() => bringWindowToFront('game')}
+          zIndex={windowLayers.game}
         />
       )}
       {terminalState !== 'maximized' && (
