@@ -11,8 +11,8 @@ const escapeTerminalHtml = (value) => (
 );
 
 const getAiErrorMessage = (error, context) => {
-  if (error.message === 'Missing VITE_NVIDIA_API_KEY') {
-    return `Error: ${context} could not start because VITE_NVIDIA_API_KEY is not available. Restart the Vite dev server after editing .env.`;
+  if (error.message === 'Missing NVIDIA_API_KEY') {
+    return `Error: ${context} could not start because NVIDIA_API_KEY is not configured on the server.`;
   }
 
   return `Error: ${context} request failed (${error.message}).`;
@@ -172,19 +172,9 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
   }, []);
 
   const callNvidiaAPI = async (messages) => {
-    const apiKey = import.meta.env.VITE_NVIDIA_API_KEY;
-    if (!apiKey) {
-      throw new Error('Missing VITE_NVIDIA_API_KEY');
-    }
-
-    const endpoint = import.meta.env.DEV
-      ? "/api/nvidia/v1/chat/completions"
-      : "https://integrate.api.nvidia.com/v1/chat/completions";
-
-    const response = await fetch(endpoint, {
+    const response = await fetch("/api/nvidia/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${apiKey}`,
         "Content-Type": "application/json",
         "Accept": "application/json"
       },
@@ -199,7 +189,14 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
       })
     });
     if (!response.ok) {
-      throw new Error(`API error: ${response.status} ${response.statusText}`);
+      let errorMessage = `${response.status} ${response.statusText}`;
+      try {
+        const errorPayload = await response.json();
+        errorMessage = errorPayload.error || errorMessage;
+      } catch {
+        // Keep the HTTP status when the proxy does not return JSON.
+      }
+      throw new Error(errorMessage);
     }
     const data = await response.json();
     return data.choices?.[0]?.message?.content || '';
