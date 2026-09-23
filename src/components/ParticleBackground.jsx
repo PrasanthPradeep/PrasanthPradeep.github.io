@@ -21,7 +21,6 @@ const ParticleBackground = () => {
     const GRID_SPACING = 40;
     const PARTICLE_SPEED = 0.15;
     const PARTICLE_BASE_SIZE = 1.2;
-    const CONNECTION_DISTANCE = 160;
     const GLOW_RADIUS = 200;
     const PARTICLE_COUNT_RATIO = 0.00004;
     const MAX_PARTICLES_MOBILE = 35;
@@ -100,26 +99,6 @@ const ParticleBackground = () => {
       }
     };
 
-    const drawConnections = () => {
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < CONNECTION_DISTANCE) {
-            const opacity = (1 - dist / CONNECTION_DISTANCE) * 0.12;
-            ctx.strokeStyle = `rgba(122, 162, 247, ${opacity})`;
-            ctx.lineWidth = 0.5;
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.stroke();
-          }
-        }
-      }
-    };
-
     const drawMouseGlow = () => {
       if (mouseRef.current.x === null) return;
       const gradient = ctx.createRadialGradient(
@@ -147,8 +126,6 @@ const ParticleBackground = () => {
         p.update(time);
         p.draw();
       }
-
-      drawConnections();
 
       animationFrameId = requestAnimationFrame(animate);
     };
