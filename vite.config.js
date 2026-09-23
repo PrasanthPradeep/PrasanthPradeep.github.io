@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  const nvidiaApiKey = env.NVIDIA_API_KEY || env.VITE_NVIDIA_API_KEY
+  const nvidiaApiKey = env.NVIDIA_API_KEY
 
   return {
     plugins: [react()],
