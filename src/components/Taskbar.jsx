@@ -202,7 +202,8 @@ const Taskbar = ({ onCommandClick, terminalActive }) => {
             data-command={icon.command || icon.id}
             title={icon.title}
             aria-expanded={icon.id === 'start' ? startOpen : undefined}
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               if (icon.id === 'start') {
                 setStartOpen((value) => !value);
                 return;
