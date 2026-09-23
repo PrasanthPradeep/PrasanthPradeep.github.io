@@ -56,14 +56,19 @@ const FullscreenToggle = () => {
     <button
       onClick={toggleFullscreen}
       aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-      title={isFullscreen ? "Exit Fullscreen (Esc)" : "Enter Fullscreen"}
-      className="fixed bottom-12 right-4 z-50 px-3 py-2 rounded-md text-xs font-medium bg-[rgba(36,40,59,0.75)] border border-[rgba(74,79,105,0.6)] shadow-lg hover:bg-[rgba(55,60,82,0.85)] active:scale-95 transition transform text-cyan-300"
-      style={{
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)'
-      }}
+      title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+      className="fixed bottom-14 right-4 z-50 flex items-center justify-center w-9 h-9 rounded-md bg-transparent border-0 text-[#c0caf5] hover:bg-[rgba(122,162,247,0.12)] active:scale-95 transition-colors cursor-pointer"
     >
-      <span>{isFullscreen ? '🡼' : '⛶'}</span>
+      {isFullscreen ? (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+          <path d="M3 3h4.5a.5.5 0 01.5.5v4M17 3h-4.5a.5.5 0 00-.5.5v4M3 17h4.5a.5.5 0 00.5-.5v-4M17 17h-4.5a.5.5 0 01-.5-.5v-4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      ) : (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+          <path d="M3 3h4.5a.5.5 0 01.5.5v4M17 3h-4.5a.5.5 0 00-.5.5v4M3 17h4.5a.5.5 0 00.5-.5v-4M17 17h-4.5a.5.5 0 01-.5-.5v-4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M7 10l3-3 3 3M10 7v6" stroke="currentColor" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      )}
     </button>
   );
 };
