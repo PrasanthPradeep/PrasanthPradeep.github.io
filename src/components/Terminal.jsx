@@ -190,7 +190,7 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
         "Accept": "application/json"
       },
       body: JSON.stringify({
-        model: "meta/llama-3.3-8b-instruct",
+        model: "mistralai/mistral-nemotron",
         messages: messages,
         max_tokens: 1024,
         temperature: 1.00,
