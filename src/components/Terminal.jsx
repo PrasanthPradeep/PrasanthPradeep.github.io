@@ -424,6 +424,12 @@ Start by welcoming the candidate and asking them what role they are interviewing
         e.preventDefault();
         processCommand('help');
       }
+      const cmdEl = target.closest ? target.closest('[data-command]') : null;
+      if (cmdEl) {
+        e.preventDefault();
+        e.stopPropagation();
+        processCommand(cmdEl.getAttribute('data-command'));
+      }
     };
 
     document.addEventListener('click', handler);
