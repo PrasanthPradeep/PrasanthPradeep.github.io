@@ -195,8 +195,7 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
         max_tokens: 1024,
         temperature: 1.00,
         top_p: 0.95,
-        stream: false,
-        chat_template_kwargs: { enable_thinking: true }
+        stream: false
       })
     });
     if (!response.ok) {
