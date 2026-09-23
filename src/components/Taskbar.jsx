@@ -104,7 +104,10 @@ const Taskbar = ({ onCommandClick, terminalActive }) => {
       title: 'Start',
       svg: (
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
-          <path d="M3.25 3A2.25 2.25 0 001 5.25v9.5A2.25 2.25 0 003.25 17h9.5A2.25 2.25 0 0015 14.75v-9.5A2.25 2.25 0 0012.75 3h-9.5zM9 5.5v3.167l2.21-.553a.75.75 0 01.882.882l-.553 2.21H14.5v.75h-3.167l.553 2.21a.75.75 0 01-.882.882L9 14.333V17.5h-.75v-3.167l-2.21.553a.75.75 0 01-.882-.882l.553-2.21H2.5v-.75h3.167l-.553-2.21a.75.75 0 01.882-.882L8.25 8.667V5.5H9z"></path>
+          <path d="M6.25 3.5a.75.75 0 00-1.5 0v3h-3a.75.75 0 000 1.5h3v3a.75.75 0 001.5 0v-3h3a.75.75 0 000-1.5h-3v-3z" />
+          <path d="M6.25 10.5a.75.75 0 00-1.5 0v3h-3a.75.75 0 000 1.5h3v3a.75.75 0 001.5 0v-3h3a.75.75 0 000-1.5h-3v-3z" />
+          <path d="M13.25 3.5a.75.75 0 00-1.5 0v3h-3a.75.75 0 000 1.5h3v3a.75.75 0 001.5 0v-3h3a.75.75 0 000-1.5h-3v-3z" />
+          <path d="M13.25 10.5a.75.75 0 00-1.5 0v3h-3a.75.75 0 000 1.5h3v3a.75.75 0 001.5 0v-3h3a.75.75 0 000-1.5h-3v-3z" />
         </svg>
       ),
       command: null
@@ -160,7 +163,7 @@ const Taskbar = ({ onCommandClick, terminalActive }) => {
             role="menu"
             aria-label="Start menu"
           >
-            <div className="border-b border-[rgba(168,177,214,0.12)] bg-[rgba(30,30,46,0.72)] px-4 py-3">
+            <div className="border-b border-[rgba(168,177,214,0.12)] bg-[rgba(21,22,30,0.72)] px-4 py-3">
               <div className="text-sm font-semibold text-white">Prasanth P</div>
               <div className="text-xs text-[#a9b1d6]">Quick launch</div>
             </div>
