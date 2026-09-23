@@ -151,7 +151,7 @@ const Taskbar = ({ onCommandClick, terminalActive }) => {
   return (
     <div 
       id="taskbar"
-      className="fixed bottom-0 left-0 z-[10000] flex h-10 w-full items-center justify-between border-t border-[rgba(74,79,105,0.4)] bg-[rgba(36,40,59,0.75)] px-2 backdrop-blur"
+      className="fixed bottom-0 left-0 z-[10000] flex h-10 w-full items-center justify-between border-t border-[rgba(74,79,105,0.4)] bg-[rgba(21,22,30,0.75)] px-2 backdrop-blur"
     >
       <div ref={startMenuRef} className="relative flex items-center">
         {startOpen && (
