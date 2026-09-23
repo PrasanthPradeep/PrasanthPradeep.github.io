@@ -5,12 +5,9 @@ export default function ToggleSiteSwitch() {
 
   const onToggle = (e) => {
     const next = e.target.checked;
-    setChecked(next);
     if (next) {
-      // Redirect to projects site
-      window.location.href = 'https://projects.prasanthp.tech';
-      // use window.location.assign(...) if you want Back button to return here
-      // window.location.assign('https://projects.prasanthp.tech');
+      window.open('https://projects.prasanthp.tech', '_blank', 'noopener,noreferrer');
+      setChecked(false);
     }
   };
 
