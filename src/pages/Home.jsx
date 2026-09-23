@@ -152,9 +152,14 @@ const Home = () => {
       )}
       {terminalState !== 'maximized' && (
         <>
-          <Taskbar 
+          <Taskbar
             onCommandClick={handleCommandClick}
             terminalActive={terminalVisible}
+            activeWindows={{
+              social: socialsVisible,
+              projects: projectsVisible,
+              github: githubVisible,
+            }}
           />
           <FullscreenToggle />
         </>

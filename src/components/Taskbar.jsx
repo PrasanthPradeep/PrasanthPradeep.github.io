@@ -45,7 +45,7 @@ const startMenuItems = [
   { id: 'skills', label: 'Skills', command: 'skills', description: 'Show skill list' }
 ];
 
-const Taskbar = ({ onCommandClick, terminalActive }) => {
+const Taskbar = ({ onCommandClick, terminalActive, activeWindows = {} }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [startOpen, setStartOpen] = useState(false);
   const startMenuRef = useRef(null);
@@ -193,40 +193,42 @@ const Taskbar = ({ onCommandClick, terminalActive }) => {
             </div>
           </div>
         )}
-        {taskbarIcons.map((icon) => (
-          <button
-            key={icon.id}
-            className={`taskbar-icon text-[#c0caf5] bg-transparent border-0 p-1.5 rounded-md transition-colors cursor-pointer relative flex items-center justify-center ${
-              icon.id === 'terminal' && terminalActive ? 'active' : ''
-            }`}
-            data-command={icon.command || icon.id}
-            title={icon.title}
-            aria-expanded={icon.id === 'start' ? startOpen : undefined}
-            onClick={(e) => {
-              e.stopPropagation();
-              if (icon.id === 'start') {
-                setStartOpen((value) => !value);
-                return;
-              }
-              if (icon.command) {
-                launchCommand(icon.command);
-              }
-            }}
-            style={{
-              ...(((icon.id === 'terminal' && terminalActive) || (icon.id === 'start' && startOpen)) && {
-                background: 'rgba(122,162,247,0.12)',
-                borderRadius: '10px',
-                padding: '6px 8px',
-                boxShadow: '0 12px 34px rgba(122,162,247,0.24), inset 0 1px 0 rgba(255,255,255,0.02)',
-                transition: 'background 180ms ease, box-shadow 220ms ease, transform 180ms ease'
-              })
-            }}
-          >
-            <div className="w-6 h-6">
-              {icon.svg}
-            </div>
-          </button>
-        ))}
+        {taskbarIcons.map((icon) => {
+          const isActive = icon.id === 'start'
+            ? startOpen
+            : icon.id === 'terminal'
+              ? terminalActive
+              : !!activeWindows[icon.id];
+
+          return (
+            <button
+              key={icon.id}
+              className={`taskbar-icon text-[#c0caf5] bg-transparent border-0 p-1.5 rounded-md transition-colors cursor-pointer relative flex items-center justify-center ${
+                isActive ? 'bg-[rgba(122,162,247,0.12)]' : ''
+              }`}
+              data-command={icon.command || icon.id}
+              title={icon.title}
+              aria-expanded={icon.id === 'start' ? startOpen : undefined}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (icon.id === 'start') {
+                  setStartOpen((value) => !value);
+                  return;
+                }
+                if (icon.command) {
+                  launchCommand(icon.command);
+                }
+              }}
+            >
+              <div className="w-6 h-6 flex items-center justify-center">
+                {icon.svg}
+              </div>
+              {isActive && (
+                <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full bg-[#7aa2f7]" />
+              )}
+            </button>
+          );
+        })}
       </div>
 
       <div className="flex items-center gap-3">
