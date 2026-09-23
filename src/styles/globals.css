@@ -279,9 +279,9 @@ body {
   }
 
   #taskbar {
-    height: 48px;
+    height: 52px;
     padding-inline: 0.35rem;
-    padding-bottom: 0.25rem;
+    padding-bottom: 0.5rem;
   }
 
   .taskbar-icon {
