@@ -736,7 +736,7 @@ Start by welcoming the candidate and asking them what role they are interviewing
       >
         {/* Terminal Header */}
         <div
-          className="terminal-header flex items-center p-2 border-b cursor-move"
+          className="terminal-header flex items-center p-2 border-b cursor-move font-terminal"
           style={{
             background: 'rgba(30, 30, 46, 0.5)',
             borderColor: 'rgba(74, 79, 105, 0.4)'
@@ -778,7 +778,7 @@ Start by welcoming the candidate and asking them what role they are interviewing
         {/* Terminal Output */}
         <div
           ref={outputRef}
-          className="terminal-output flex-grow overflow-y-auto p-4 text-base leading-relaxed text-[#a9b1d6]"
+          className="terminal-output flex-grow overflow-y-auto p-4 text-base leading-relaxed text-[#a9b1d6] font-terminal"
           style={{
             display: 'block'
           }}
@@ -791,7 +791,7 @@ Start by welcoming the candidate and asking them what role they are interviewing
 
         {/* Terminal Input */}
         <div
-          className="terminal-input border-t p-2"
+          className="terminal-input border-t p-2 font-terminal"
           style={{
             background: 'rgba(30, 30, 46, 0.5)',
             borderColor: 'rgba(74, 79, 105, 0.4)'
