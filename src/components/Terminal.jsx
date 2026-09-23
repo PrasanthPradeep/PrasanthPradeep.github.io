@@ -190,7 +190,7 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
         "Accept": "application/json"
       },
       body: JSON.stringify({
-        model: "llama-3.1-8b-instant",
+        model: "qwen/qwen3.8-27b",
         messages: messages,
         max_tokens: 1024,
         temperature: 1.00,
