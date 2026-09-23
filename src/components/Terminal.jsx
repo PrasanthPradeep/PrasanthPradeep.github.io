@@ -304,7 +304,10 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
         content: `You are a technical interviewer conducting a mock interview with a visitor on Prasanth Pradeep's portfolio site.
 Start by welcoming the candidate and asking them what role they are interviewing for (e.g. Frontend Developer, Fullstack Engineer), or ask them a warm-up coding/technical question.`
       };
-      const responseContent = await callNvidiaAPI([systemPrompt]);
+      const responseContent = await callNvidiaAPI([
+        systemPrompt,
+        { role: "user", content: "Start the interview." }
+      ]);
       setOutput(prev => prev.filter(item => item.id !== loadingId));
       appendOutput(`<div class="text-yellow-300">${escapeTerminalHtml(responseContent)}</div>`);
       setInterviewHistory([{ role: "assistant", content: responseContent }]);
