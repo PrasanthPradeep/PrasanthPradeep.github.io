@@ -8,15 +8,15 @@ export default function ToggleSiteSwitch() {
     setChecked(next);
     if (next) {
       // Redirect to projects site
-      window.location.href = 'https://projects.prasanthp.me';
+      window.location.href = 'https://projects.prasanthp.tech';
       // use window.location.assign(...) if you want Back button to return here
-      // window.location.assign('https://projects.prasanthp.me');
+      // window.location.assign('https://projects.prasanthp.tech');
     }
   };
 
   return (
     <label className="ml-3 inline-flex items-center cursor-pointer select-none" title="Toggle to Projects">
-      <span className="mr-2 text-[11px] text-cyan-300">Terminal</span>
+      <span className="mr-2 text-[11px] text-[#7aa2f7]">Terminal</span>
       <input
         type="checkbox"
         className="sr-only peer"
@@ -26,10 +26,10 @@ export default function ToggleSiteSwitch() {
         role="switch"
         aria-checked={checked}
       />
-      <span className="relative w-14 h-7 rounded-full bg-[rgba(36,40,59,0.75)] border border-[rgba(74,79,105,0.6)] transition-colors peer-checked:bg-cyan-500/30">
-        <span className="absolute top-0.5 left-0.5 w-6 h-6 rounded-full bg-cyan-300 shadow transition-transform peer-checked:translate-x-7" />
+      <span className="relative w-14 h-7 rounded-full bg-[rgba(36,40,59,0.75)] border border-[rgba(74,79,105,0.6)] transition-colors peer-checked:bg-[rgba(122,162,247,0.3)]">
+        <span className="absolute top-0.5 left-0.5 w-6 h-6 rounded-full bg-[#7aa2f7] shadow transition-transform peer-checked:translate-x-7" />
       </span>
-      <span className="ml-2 text-[11px] text-cyan-300">Projects</span>
+      <span className="ml-2 text-[11px] text-[#7aa2f7]">Projects</span>
     </label>
   );
 }
