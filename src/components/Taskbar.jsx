@@ -156,7 +156,7 @@ const Taskbar = ({ onCommandClick, terminalActive }) => {
       id="taskbar"
       className="fixed bottom-0 left-0 z-[10000] flex h-10 w-full items-center justify-between border-t border-[rgba(74,79,105,0.4)] bg-[rgba(21,22,30,0.75)] px-2 backdrop-blur"
     >
-      <div ref={startMenuRef} className="relative flex items-center">
+      <div ref={startMenuRef} className="relative flex items-center gap-1">
         {startOpen && (
           <div
             className="start-menu absolute bottom-11 left-0 w-[min(360px,calc(100vw-16px))] overflow-hidden rounded-lg border border-[rgba(168,177,214,0.16)] bg-[rgba(21,22,30,0.94)] text-[#c0caf5] shadow-2xl backdrop-blur-xl"
@@ -196,7 +196,7 @@ const Taskbar = ({ onCommandClick, terminalActive }) => {
         {taskbarIcons.map((icon) => (
           <button
             key={icon.id}
-            className={`taskbar-icon text-[#c0caf5] bg-transparent border-0 p-1 mx-0.5 rounded transition-colors cursor-pointer relative ${
+            className={`taskbar-icon text-[#c0caf5] bg-transparent border-0 p-1.5 rounded-md transition-colors cursor-pointer relative flex items-center justify-center ${
               icon.id === 'terminal' && terminalActive ? 'active' : ''
             }`}
             data-command={icon.command || icon.id}
@@ -229,9 +229,9 @@ const Taskbar = ({ onCommandClick, terminalActive }) => {
         ))}
       </div>
 
-      <div className="flex items-center">
+      <div className="flex items-center gap-3">
         <ToggleSiteSwitch />
-        <div id="taskbar-clock" className="ml-3 text-[12px] font-medium text-[#c0caf5]">
+        <div id="taskbar-clock" className="text-[12px] font-medium text-[#c0caf5] leading-tight">
           {formatTime()}
           <br />
           {formatDate()}
