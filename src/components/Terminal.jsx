@@ -190,7 +190,7 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
         "Accept": "application/json"
       },
       body: JSON.stringify({
-        model: "z-ai/glm-5.3-flash",
+        model: "google/gemma-3-4b-it",
         messages: messages,
         max_tokens: 1024,
         temperature: 1.00,
