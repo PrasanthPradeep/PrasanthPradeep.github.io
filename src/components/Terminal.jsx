@@ -190,12 +190,13 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
         "Accept": "application/json"
       },
       body: JSON.stringify({
-        model: "google/gemma-3-4b-it",
+        model: "nvidia/nemotron-3.5-lightning-30b-a3b",
         messages: messages,
         max_tokens: 1024,
         temperature: 1.00,
         top_p: 0.95,
-        stream: false
+        stream: false,
+        chat_template_kwargs: { enable_thinking: true }
       })
     });
     if (!response.ok) {
