@@ -104,10 +104,10 @@ const Taskbar = ({ onCommandClick, terminalActive }) => {
       title: 'Start',
       svg: (
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
-          <path d="M6.25 3.5a.75.75 0 00-1.5 0v3h-3a.75.75 0 000 1.5h3v3a.75.75 0 001.5 0v-3h3a.75.75 0 000-1.5h-3v-3z" />
-          <path d="M6.25 10.5a.75.75 0 00-1.5 0v3h-3a.75.75 0 000 1.5h3v3a.75.75 0 001.5 0v-3h3a.75.75 0 000-1.5h-3v-3z" />
-          <path d="M13.25 3.5a.75.75 0 00-1.5 0v3h-3a.75.75 0 000 1.5h3v3a.75.75 0 001.5 0v-3h3a.75.75 0 000-1.5h-3v-3z" />
-          <path d="M13.25 10.5a.75.75 0 00-1.5 0v3h-3a.75.75 0 000 1.5h3v3a.75.75 0 001.5 0v-3h3a.75.75 0 000-1.5h-3v-3z" />
+          <rect x="3" y="3" width="6" height="6" rx="1.5" />
+          <rect x="11" y="3" width="6" height="6" rx="1.5" />
+          <rect x="3" y="11" width="6" height="6" rx="1.5" />
+          <rect x="11" y="11" width="6" height="6" rx="1.5" />
         </svg>
       ),
       command: null
