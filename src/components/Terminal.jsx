@@ -190,13 +190,12 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
         "Accept": "application/json"
       },
       body: JSON.stringify({
-        model: "nvidia/nemotron-3.5-lightning-30b-a3b",
+        model: "llama-3.1-8b-instant",
         messages: messages,
         max_tokens: 1024,
         temperature: 1.00,
         top_p: 0.95,
-        stream: false,
-        chat_template_kwargs: { enable_thinking: true }
+        stream: false
       })
     });
     if (!response.ok) {

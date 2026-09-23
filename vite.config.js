@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  const nvidiaApiKey = env.NVIDIA_API_KEY
+  const groqApiKey = env.GROQ_API_KEY
 
   return {
     plugins: [react()],
@@ -14,14 +14,14 @@ export default defineConfig(({ mode }) => {
       open: true,
       proxy: {
         '/api/nvidia': {
-          target: 'https://integrate.api.nvidia.com',
+          target: 'https://api.groq.com',
           changeOrigin: true,
           secure: true,
-          rewrite: (path) => path.replace(/^\/api\/nvidia/, ''),
+          rewrite: (path) => path.replace(/^\/api\/nvidia/, '/openai'),
           configure: (proxy) => {
             proxy.on('proxyReq', (proxyReq) => {
-              if (nvidiaApiKey) {
-                proxyReq.setHeader('Authorization', `Bearer ${nvidiaApiKey}`)
+              if (groqApiKey) {
+                proxyReq.setHeader('Authorization', `Bearer ${groqApiKey}`)
               }
             })
           }
