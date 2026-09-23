@@ -12,8 +12,8 @@ const escapeTerminalHtml = (value) => (
 
 const getAiErrorMessage = (error, context) => {
   const message = error?.message || (typeof error === 'string' ? error : JSON.stringify(error));
-  if (message === 'Missing NVIDIA_API_KEY') {
-    return `Error: ${context} could not start because NVIDIA_API_KEY is not configured on the server.`;
+  if (message.includes('Missing') && message.includes('API_KEY')) {
+    return `Error: ${context} could not start because the API key is not configured.`;
   }
 
   return `Error: ${context} request failed (${message}).`;
@@ -202,7 +202,11 @@ const Terminal = ({ isVisible, onToggle, terminalState, setTerminalState, extern
       let errorMessage = `${response.status} ${response.statusText}`;
       try {
         const errorPayload = await response.json();
-        errorMessage = errorPayload.error || errorMessage;
+        if (errorPayload.error) {
+          errorMessage = typeof errorPayload.error === 'string'
+            ? errorPayload.error
+            : errorPayload.error.message || JSON.stringify(errorPayload.error);
+        }
       } catch {
         // Keep the HTTP status when the proxy does not return JSON.
       }
