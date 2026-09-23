@@ -57,7 +57,7 @@ const FullscreenToggle = () => {
       onClick={toggleFullscreen}
       aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
       title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
-      className="fixed bottom-14 right-4 z-50 flex items-center justify-center w-8 h-8 rounded-md text-[#a9b1d6]/50 hover:text-[#a9b1d6] hover:bg-[rgba(122,162,247,0.08)] transition-all cursor-pointer"
+      className="fixed bottom-14 right-4 z-50 flex items-center justify-center w-9 h-9 rounded-md bg-transparent border-0 text-[#c0caf5] hover:bg-[rgba(122,162,247,0.12)] active:scale-95 transition-colors cursor-pointer"
     >
       {isFullscreen ? (
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
