@@ -604,16 +604,20 @@ Start by welcoming the candidate and asking them what role they are interviewing
   const handleMouseDown = (e) => {
     if (isMobile || terminalState === 'maximized' || terminalState === 'minimized') return;
 
-    if (isFirstDrag && terminalRef.current) {
+    if (terminalRef.current) {
       const rect = terminalRef.current.getBoundingClientRect();
+      // Always use the actual rendered position for offset calculation
+      setDragOffset({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      });
+      // Sync state position with actual rendered position
       setPosition({ x: rect.left, y: rect.top });
-      setIsFirstDrag(false);
     }
 
-    setDragOffset({
-      x: e.clientX - position.x,
-      y: e.clientY - position.y
-    });
+    if (isFirstDrag) {
+      setIsFirstDrag(false);
+    }
     setIsDragging(true);
   };
 
